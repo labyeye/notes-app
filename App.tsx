@@ -5,6 +5,7 @@ import HomeScreen from "./assests/screens/Home/HomeScreen";
 import AddNotes from "./assests/screens/AddNotes/AddNotes";
 import Start from "./assests/screens/Start";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import EditNotesScreen from "./assests/screens/EditNotes/EditNotes";
 
 const App = () => {
   const [hideSplashScreen, setHideSplashScreen] = React.useState(true);
@@ -22,6 +23,11 @@ const App = () => {
             <Stack.Screen
               name="HomeScreen"
               component={HomeScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="EditNotesScreen"
+              component={EditNotesScreen}
               options={{ headerShown: false }}
             />
             <Stack.Screen

@@ -10,29 +10,31 @@ const windowHeight = Dimensions.get('window').height;
 const HomeScreen = ({ navigation }) => {
   const isFocused = useIsFocused();
   const [allnotes, setAll] = useState([]);
+
   useEffect(() => {
     getAllNotes();
   }, [isFocused]);
+
   const deleteNote = async index => {
-    let temp = allnotes;;
-    let x = [];
-    temp.map((item,ind) => {
-      if(ind!=index){
-        x.push(item);
-      }
-    })
-    
-    await EncryptedStorage.setItem('notes', JSON.stringify({ data: x }));
+    let temp = allnotes.slice(); // Create a copy of the array
+    temp.splice(index, 1);
+    await EncryptedStorage.setItem('notes', JSON.stringify({ data: temp }));
     getAllNotes();
   }
 
+  const navigateToEditScreen = (index) => {
+    const noteToEdit = allnotes[index];
+    navigation.navigate("EditNotesScreen", { noteToEdit, index, allnotes, onNoteUpdate: getAllNotes });
+  }
   const getAllNotes = async () => {
     let x=[];
     let y = await EncryptedStorage.getItem('notes');
     let data = JSON.parse(y);
-    data.data.map(item => {
-      x.push(item);
-    });
+    if (data && data.data) {
+      data.data.map(item => {
+        x.push(item);
+      });
+    }
     setAll(x);
   };
 
@@ -52,22 +54,22 @@ const HomeScreen = ({ navigation }) => {
         <FlatList
           data={allnotes}
           renderItem={({ item, index }) => (
-            <View style={styles.notetab}>
-              <Text style={styles.title}>{item.title}</Text>
-              <Text style={styles.desc}>{item.desc}</Text>
-              <TouchableOpacity onPress={() => {
-                  deleteNote(index);
-                }}>
-                  <Image style={styles.delete}source={require ('../../delete.png')}/>
+            <TouchableOpacity onPress={() => navigateToEditScreen(index)}>
+              <View style={styles.notetab}>
+                <Text style={styles.title}>{item.title}</Text>
+                <Text style={styles.desc}>{item.desc}</Text>
+                <TouchableOpacity onPress={() => deleteNote(index)}>
+                  <Image style={styles.delete} source={require('../../delete.png')} />
                 </TouchableOpacity>
-
-            </View>
+              </View>
+            </TouchableOpacity>
           )}
         />
       </View>
     </View>
   );
 };
+
 
 
 const styles = StyleSheet.create({
