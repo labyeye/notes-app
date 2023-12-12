@@ -19,13 +19,14 @@ const getRandomColor = () => {
 const HomeScreen = ({ navigation }) => {
   const isFocused = useIsFocused();
   const [allnotes, setAll] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     getAllNotes();
   }, [isFocused]);
 
   const deleteNote = async index => {
-    let temp = allnotes.slice(); // Create a copy of the array
+    let temp = allnotes.slice();
     temp.splice(index, 1);
     await EncryptedStorage.setItem('notes', JSON.stringify({ data: temp }));
     getAllNotes();
@@ -47,6 +48,8 @@ const HomeScreen = ({ navigation }) => {
     }
     setAll(x);
   };
+
+  const filteredNotes = allnotes.filter(item => item.title.toLowerCase().includes(searchQuery.toLowerCase()));
 
   const renderItem = ({ item, index }) => {
     const noteColor = getRandomColor();
@@ -73,6 +76,8 @@ const HomeScreen = ({ navigation }) => {
         <TextInput
           style={styles.input}
           placeholder="Search..."
+          value={searchQuery}
+          onChangeText={(text) => setSearchQuery(text)}
         />
         <Pressable onPress={() => navigation.navigate("AddNotes")}>
           <Image style={styles.plusimg} source={require('../../plus.png')} />
@@ -80,7 +85,7 @@ const HomeScreen = ({ navigation }) => {
       </View>
       <View style={styles.noteback}>
         <FlatList
-          data={allnotes}
+          data={filteredNotes}
           renderItem={renderItem}
           keyExtractor={(item, index) => index.toString()}
         />
