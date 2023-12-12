@@ -34,82 +34,57 @@ const AddNotes = ({ navigation }) => {
                 <Pressable onPress={() => navigation.navigate("HomeScreen")}>
                     <Image style={styles.searchimg} source={require('../../back.png')} />
                 </Pressable>
+                <Pressable onPress={() => savenote()}>
+                    <Image style={styles.saveimg} source={require('../../diskette.png')} />
+                </Pressable>
             </View>
             <View style={styles.back}>
-                <Text style={{ color: 'white', alignSelf: 'flex-start', fontSize: 30, marginLeft: 20 }}>
-                    Title
-                </Text>
-                <TextInput style={styles.addtitle} value={title} onChangeText={(txt) => setitle(txt)} />
-                <Text style={{ color: 'white', alignSelf: 'flex-start', fontSize: 30, marginLeft: 20 }}>
-                    Description
-                </Text>
-                <TextInput style={styles.adddesc} value={desc} onChangeText={(txt) => setdesc(txt)} />
-                <TouchableOpacity style={styles.addbtn} onPress={() => savenote()}>
-                    <Text style={{ fontSize: 20, fontWeight: '500' }}>Add Notes</Text>
-                </TouchableOpacity>
+                <TextInput placeholder="Title"  style={[styles.addtitle,{fontSize: 39 }]} placeholderTextColor="white"value={title} onChangeText={(txt) => setitle(txt)} />
+                
+                <TextInput placeholder="Type Something" placeholderTextColor="white"style={styles.adddesc} value={desc} onChangeText={(txt) => setdesc(txt)} multiline/>
+                
             </View>
         </View>
     );
 };
 const styles = StyleSheet.create({
-    addbtn: { 
-        borderRadius: 20,
-        alignItems: "center",
-        justifyContent: 'center',
-        backgroundColor: 'gray',
-        height: "8%",
-        width: "80%",
-        marginTop: 10
-
-    },
     back: {
-        gap: 10,
         flexDirection: "column",
         width: "100%",
         alignItems: "center"
     },
     addtitle: {
-        marginTop: 20,
-        borderRadius: 10,
-        width: "90%",
+        width: windowWidth,
         fontSize:30,
         padding:10,
         height: "10%",
-        backgroundColor: 'white'
+        color:'white',
+        backgroundColor: 'black'
     },
     adddesc: {
-        marginTop: 20,
-        borderRadius: 10,
-        width: "90%",
+        width: windowWidth,
         fontSize:20,
         padding:10,
-        height: "40%",
-        backgroundColor: 'white'
-    },
-    plusimg: {
-        width: 20,
-        height: 20,
-        marginLeft: 10,
+        color:'white',
+        height: windowHeight,
+        backgroundColor: 'black'
     },
     searchimg: {
         width: 30,
         height: 30,
         marginLeft: 30,
     },
-    input: {
-        width: "75%",
-        height: "60%",
-        borderColor: 'gray',
-        borderWidth: 3,
-        borderRadius: 20,
-        marginLeft: 10,
-        color: 'white'
+    saveimg: {
+        width: 30,
+        height: 30,
+        marginRight: 30,
     },
     searchtab: {
         width: "100%",
         height: "10%",
         marginTop: 60,
         gap: 10,
+        justifyContent:'space-between',
         flexDirection: "row",
         alignItems: "center"
     },

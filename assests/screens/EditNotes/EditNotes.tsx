@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Dimensions } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Dimensions, Pressable, Image } from "react-native";
 import EncryptedStorage from "react-native-encrypted-storage";
 
 const windowWidth = Dimensions.get('window').width;
@@ -34,24 +34,29 @@ const EditNotesScreen = ({ route, navigation }) => {
      }
   return (
     <View style={styles.background}>
-      <View style={{marginTop:100,width:"100%",alignItems:"center"}}>
-        <Text style={{ color: 'white', alignSelf: 'flex-start', fontSize: 30, marginLeft: 20 }}>
-                    Title
-        </Text>
+        <View style={styles.searchtab}>
+                <Pressable onPress={() => navigation.navigate("HomeScreen")}>
+                    <Image style={styles.searchimg} source={require('../../back.png')} />
+                </Pressable>
+                <Pressable onPress={() => saveChanges()}>
+                    <Image style={styles.saveimg} source={require('../../diskette.png')} />
+                </Pressable>
+            </View>
+      <View style={{width:windowWidth,alignItems:"center"}}>
         <TextInput
-            style={styles.addtitle}
-            placeholder="Title"
+            style={[styles.addtitle,{fontSize: 39 }]} placeholderTextColor="white"
             value={title}
             onChangeText={setTitle}
+            placeholder="Title" 
         />
-        <Text style={{ color: 'white', alignSelf: 'flex-start', fontSize: 30, marginLeft: 20,marginTop:20 }}>Description
-        </Text>
         <TextInput
             style={styles.adddesc}
-            placeholder="Description"
+            placeholder="Type Something"
             value={desc}
             onChangeText={setDesc}
             multiline
+            placeholderTextColor="white"
+
         />
         <TouchableOpacity style={{width:"80%",alignItems:"center",justifyContent:'center',height:"8%",borderRadius:20,marginTop:20,backgroundColor:'yellow'}}onPress={saveChanges}>
             <Text style={{color:'black'}}>Save Changes</Text>
@@ -63,14 +68,35 @@ const EditNotesScreen = ({ route, navigation }) => {
 
 
 const styles = StyleSheet.create({
+    searchtab: {
+        width: "100%",
+        height: "10%",
+        marginTop: 60,
+        gap: 10,
+        justifyContent:'space-between',
+        flexDirection: "row",
+        alignItems: "center"
+    },
+    saveimg: {
+        width: 30,
+        height: 30,
+        marginRight: 30,
+    },
     addtitle: {
-        marginTop: 20,
-        borderRadius: 10,
-        width: "90%",
+        width: windowWidth,
         fontSize:30,
         padding:10,
         height: "10%",
-        backgroundColor: 'white'
+        color:'white',
+        backgroundColor: 'black'
+    },
+    adddesc: {
+        width: windowWidth,
+        fontSize:20,
+        padding:10,
+        color:'white',
+        height: windowHeight,
+        backgroundColor: 'black'
     },
     delete: {
         marginVertical: -50,
@@ -79,15 +105,7 @@ const styles = StyleSheet.create({
         position: "absolute",
         right: "10%"
     },
-    adddesc: {
-        marginTop: 20,
-        borderRadius: 10,
-        width: "90%",
-        fontSize:20,
-        padding:10,
-        height: "40%",
-        backgroundColor: 'white'
-    },
+    
     title: {
         marginLeft: 10,
         marginTop: 10,
@@ -106,7 +124,7 @@ const styles = StyleSheet.create({
     searchimg: {
         width: 20,
         height: 20,
-        marginLeft: 30,
+        marginLeft: 15,
     },
     input: {
         width: "85%",
@@ -117,14 +135,7 @@ const styles = StyleSheet.create({
         marginLeft: 10,
         color: 'white'
     },
-    searchtab: {
-        width: "100%",
-        height: "10%",
-        marginTop: 60,
-        gap: 10,
-        flexDirection: "row",
-        alignItems: "center"
-    },
+    
     background: {
         height: windowHeight,
         width: windowWidth,
