@@ -6,42 +6,48 @@ import EncryptedStorage from "react-native-encrypted-storage";
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-const AddNotes = ({ navigation }) => {
-    const [title, setitle] = useState("");
-    const [desc, setdesc] = useState("");
-    const savenote = async () => {
+const AddTodo = ({ navigation }) => {
+    const [title, seTitle] = useState("");
+    const [desc, setDesc] = useState("");
+    const savetodo = async () => {
         try {
-            // Retrieve existing notes
-            let existingNotes = await EncryptedStorage.getItem('notes');
-            existingNotes = existingNotes ? JSON.parse(existingNotes).data : [];
+            // Retrieve existing todos
+            let existingTodos = await EncryptedStorage.getItem('todos');
+            existingTodos = existingTodos ? JSON.parse(existingTodos).data : [];
     
-            // Add the new note
-            const newNote = { title, desc };
-            existingNotes.push(newNote);
+            // Ensure existingTodos is an array
+            if (!Array.isArray(existingTodos)) {
+                existingTodos = [];
+            }
     
-            // Save the updated notes
-            await EncryptedStorage.setItem('notes', JSON.stringify({ data: existingNotes }));
+            // Add the new todo
+            const newTodo = { title, desc };
+            existingTodos.push(newTodo);
+    
+            // Save the updated todos
+            await EncryptedStorage.setItem('todos', JSON.stringify({ data: existingTodos }));
     
             // Navigate back
             navigation.goBack();
         } catch (error) {
-            console.error('Error saving note:', error);
+            console.error('Error saving todo:', error);
         }
     };
+    
     return (
         <View style={styles.background}>
             <View style={styles.searchtab}>
                 <Pressable onPress={() => navigation.navigate("HomeScreen")}>
-                    <Image style={styles.searchimg} source={require('../../back.png')} />
+                    <Image style={styles.searchimg} source={require('../../Images/back.png')} />
                 </Pressable>
-                <Pressable onPress={() => savenote()}>
-                    <Image style={styles.saveimg} source={require('../../diskette.png')} />
+                <Pressable onPress={() => savetodo()}>
+                    <Image style={styles.saveimg} source={require('../../Images/diskette.png')} />
                 </Pressable>
             </View>
             <View style={styles.back}>
-                <TextInput placeholder="Title"  style={[styles.addtitle,{fontSize: 39 }]} placeholderTextColor="white"value={title} onChangeText={(txt) => setitle(txt)} />
+                <TextInput placeholder="Title"  style={[styles.addtitle,{fontSize: 39 }]} placeholderTextColor="white"value={title} onChangeText={(txt) => seTitle(txt)} />
                 
-                <TextInput placeholder="Type Something" placeholderTextColor="white"style={styles.adddesc} value={desc} onChangeText={(txt) => setdesc(txt)} multiline/>
+                <TextInput placeholder="Type Something" placeholderTextColor="white"style={styles.adddesc} value={desc} onChangeText={(txt) => setDesc(txt)} multiline/>
                 
             </View>
         </View>
@@ -96,6 +102,6 @@ const styles = StyleSheet.create({
     },
 });
 
-export default AddNotes;
+export default AddTodo;
 
 

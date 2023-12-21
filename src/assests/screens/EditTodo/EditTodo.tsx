@@ -5,7 +5,7 @@ import EncryptedStorage from "react-native-encrypted-storage";
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-const EditNotesScreen = ({ route, navigation }) => {
+const EditTodo = ({ route, navigation }) => {
     const {noteToEdit, index, onNoteUpdate } = route.params;
     const [title, setTitle] = useState(noteToEdit.title);
     const [desc, setDesc] = useState(noteToEdit.desc);
@@ -35,11 +35,11 @@ const EditNotesScreen = ({ route, navigation }) => {
   return (
     <View style={styles.background}>
         <View style={styles.searchtab}>
-                <Pressable onPress={() => navigation.navigate("HomeScreen")}>
-                    <Image style={styles.searchimg} source={require('../../back.png')} />
+                <Pressable onPress={() => navigation.navigate("Todo")}>
+                    <Image style={styles.searchimg} source={require('../../Images/back.png')} />
                 </Pressable>
                 <Pressable onPress={() => saveChanges()}>
-                    <Image style={styles.saveimg} source={require('../../diskette.png')} />
+                    <Image style={styles.saveimg} source={require('../../Images/diskette.png')} />
                 </Pressable>
             </View>
       <View style={{width:windowWidth,alignItems:"center"}}>
@@ -156,4 +156,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default EditNotesScreen;
+export default EditTodo;

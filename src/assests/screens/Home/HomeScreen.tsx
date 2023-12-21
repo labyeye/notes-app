@@ -62,7 +62,7 @@ const HomeScreen = ({ navigation }) => {
             <Text style={styles.desc}>{item.desc}</Text>
           </View>
           <TouchableOpacity style={{ height: "100%", justifyContent: 'center' }} onPress={() => deleteNote(index)}>
-            <Image style={styles.delete} source={require('../../bin.png')} />
+            <Image style={styles.delete} source={require('../../Images/bin.png')} />
           </TouchableOpacity>
         </View>
       </TouchableOpacity>
@@ -72,7 +72,7 @@ const HomeScreen = ({ navigation }) => {
   return (
     <View style={styles.background}>
       <View style={styles.searchtab}>
-        <Image style={styles.searchimg} source={require('../../search.png')} />
+        <Image style={styles.searchimg} source={require('../../Images/search.png')} />
         <TextInput
           style={styles.input}
           placeholder="Search..."
@@ -80,7 +80,7 @@ const HomeScreen = ({ navigation }) => {
           onChangeText={(text) => setSearchQuery(text)}
         />
         <Pressable onPress={() => navigation.navigate("AddNotes")}>
-          <Image style={styles.plusimg} source={require('../../plus.png')} />
+          <Image style={styles.plusimg} source={require('../../Images/plus.png')} />
         </Pressable>
       </View>
       <View style={styles.noteback}>
@@ -91,7 +91,10 @@ const HomeScreen = ({ navigation }) => {
         />
       </View>
     </View>
+    
   );
+  
+  
 };
 
 const styles = StyleSheet.create({
