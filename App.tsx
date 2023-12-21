@@ -10,6 +10,7 @@ import AddNotes from "./src/assests/screens/AddNotes/AddNotes";
 import { Image, View } from "react-native";
 import AddTodo from "./src/assests/screens/AddTodo/AddTodo";
 import EditTodo from "./src/assests/screens/EditTodo";
+import StatTodo from "./src/assests/screens/TodoStat/StatTodo";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -67,6 +68,7 @@ const App = () => {
         <Stack.Screen name="EditTodo" component={EditTodo} />
         <Stack.Screen name="AddNotes" component={AddNotes} />
         <Stack.Screen name="AddTodo" component={AddTodo} />
+        <Stack.Screen name="StatTodo" component={StatTodo} />
 
 
       </Stack.Navigator>

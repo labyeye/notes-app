@@ -3,6 +3,7 @@ import { StyleSheet, View, Text, Pressable, Image, Dimensions, TextInput, FlatLi
 import EncryptedStorage from "react-native-encrypted-storage";
 import { useIsFocused } from "@react-navigation/native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
+import { Colors } from "react-native/Libraries/NewAppScreen";
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
@@ -16,6 +17,7 @@ const getRandomColor = () => {
 };
 
 const TodoHome = ({ navigation }) => {
+  const [isChecked,setIsChecked] = useState(false);
   const isFocused = useIsFocused();
   const [alltodos, setAllTodos] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -45,22 +47,26 @@ const TodoHome = ({ navigation }) => {
     }
     setAllTodos(todos);
 };
-  
   const renderItem = ({ item, index }) => {
     const noteColor = getRandomColor();
+    
 
     return (
       <TouchableOpacity>
         <View style={[styles.notetab, { backgroundColor: noteColor }]}>
-          <View style={{ width: "80%", height: "50%" }}>
+          <View style={{ width: "80%", height: "50%" ,flexDirection:"row"}}>
             <BouncyCheckbox
               size={25}
               fillColor="white"
               unfillColor="#FFFFFF"
-              onPress={(isChecked: boolean) => {}}
+              isChecked={isChecked}
+              onPress={() => setIsChecked(!isChecked)}
+              style={{marginTop:40,marginLeft:10}}
             />
-            <Text style={styles.title}>{item.title}</Text>
-            <Text style={styles.desc}>{item.desc}</Text>
+            <View style={{flexDirection:"column"}}>
+              <Text style={styles.title}>{item.title}</Text>
+              <Text style={styles.desc}>{item.desc}</Text>
+            </View>
           </View>
           <TouchableOpacity style={{ height: "100%", justifyContent: 'center' }} onPress={() => deleteTodo(index)}>
             <Image style={styles.delete} source={require('../../Images/bin.png')} />
@@ -73,7 +79,9 @@ const TodoHome = ({ navigation }) => {
   return (
     <View style={styles.background}>
       <View style={styles.searchtab}>
-        <Image style={styles.searchimg} source={require('../../Images/search.png')} />
+        <TouchableOpacity onPress={() => navigation.navigate("StatTodo")}>
+          <Image style={styles.searchimg} source={require('../../Images/graph.png')} />
+        </TouchableOpacity>
         <TextInput
           style={styles.input}
           placeholder="Search..."
