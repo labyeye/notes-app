@@ -3,7 +3,6 @@ import { StyleSheet, View, Text, Pressable, Image, Dimensions, TextInput, FlatLi
 import EncryptedStorage from "react-native-encrypted-storage";
 import { useIsFocused } from "@react-navigation/native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
-import { Colors } from "react-native/Libraries/NewAppScreen";
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
@@ -17,53 +16,61 @@ const getRandomColor = () => {
 };
 
 const TodoHome = ({ navigation }) => {
-  const [isChecked,setIsChecked] = useState(false);
+
   const isFocused = useIsFocused();
   const [alltodos, setAllTodos] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [checkboxCount, setCheckboxCount] = useState(0);
+  
+
+
   useEffect(() => {
     getAllTodos();
   }, [isFocused]);
+
+  const handleCheckboxPress = () => {
+    setCheckboxCount((prevCount) => prevCount + 1);
+  };
 
   const deleteTodo = async (index) => {
     try {
       let temp = alltodos.slice();
       temp.splice(index, 1);
       await EncryptedStorage.setItem('todos', JSON.stringify({ data: temp }));
-      getAllTodos(); // Ensure you are fetching the updated list
+      getAllTodos();
     } catch (error) {
       console.error('Error deleting todo:', error);
     }
   };
-  
+
   const getAllTodos = async () => {
     let todos = [];
     let storedTodos = await EncryptedStorage.getItem('todos');
     let data = JSON.parse(storedTodos);
     if (data && data.data) {
-        data.data.forEach(item => {
-            todos.push(item);
-        });
+      data.data.forEach(item => {
+        todos.push(item);
+      });
     }
     setAllTodos(todos);
-};
+  };
+
   const renderItem = ({ item, index }) => {
     const noteColor = getRandomColor();
-    
 
     return (
       <TouchableOpacity>
         <View style={[styles.notetab, { backgroundColor: noteColor }]}>
-          <View style={{ width: "80%", height: "50%" ,flexDirection:"row"}}>
+          <View style={{ width: "80%", height: "50%", flexDirection: "row" }}>
             <BouncyCheckbox
               size={25}
-              fillColor="white"
+              
               unfillColor="#FFFFFF"
-              isChecked={isChecked}
-              onPress={() => setIsChecked(!isChecked)}
-              style={{marginTop:40,marginLeft:10}}
+              isChecked={false}  // You can set it to true or false based on the initial state
+              onPress={() => handleCheckboxPress}
+              style={{ marginTop: 40, marginLeft: 10 }}
             />
-            <View style={{flexDirection:"column"}}>
+            <View style={{ flexDirection: "column" }}>
               <Text style={styles.title}>{item.title}</Text>
               <Text style={styles.desc}>{item.desc}</Text>
             </View>
@@ -79,9 +86,9 @@ const TodoHome = ({ navigation }) => {
   return (
     <View style={styles.background}>
       <View style={styles.searchtab}>
-        <TouchableOpacity onPress={() => navigation.navigate("StatTodo")}>
+        <Pressable onPress={() => navigation.navigate("StatTodo")}>
           <Image style={styles.searchimg} source={require('../../Images/graph.png')} />
-        </TouchableOpacity>
+        </Pressable>
         <TextInput
           style={styles.input}
           placeholder="Search..."
@@ -168,9 +175,9 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderWidth: 1,
     borderColor: "white",
-    marginTop:35,
-    marginLeft:10
-    
+    marginTop: 35,
+    marginLeft: 10
+
   },
   checkedCheckbox: {
     backgroundColor: "white",

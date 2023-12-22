@@ -7,26 +7,28 @@ const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 const AddTodo = ({ navigation }) => {
-    const [title, seTitle] = useState("");
+    const [title, setTitle] = useState("");
     const [desc, setDesc] = useState("");
-    const savetodo = async () => {
+    const [category, setCategory] = useState("Regular");
+
+    const saveTodo = async () => {
         try {
             // Retrieve existing todos
             let existingTodos = await EncryptedStorage.getItem('todos');
             existingTodos = existingTodos ? JSON.parse(existingTodos).data : [];
-    
+
             // Ensure existingTodos is an array
             if (!Array.isArray(existingTodos)) {
                 existingTodos = [];
             }
-    
-            // Add the new todo
-            const newTodo = { title, desc };
+
+            // Add the new todo with category
+            const newTodo = { title, desc, category };
             existingTodos.push(newTodo);
-    
+
             // Save the updated todos
             await EncryptedStorage.setItem('todos', JSON.stringify({ data: existingTodos }));
-    
+
             // Navigate back
             navigation.goBack();
         } catch (error) {
@@ -34,25 +36,26 @@ const AddTodo = ({ navigation }) => {
         }
     };
     
+
     return (
         <View style={styles.background}>
             <View style={styles.searchtab}>
                 <Pressable onPress={() => navigation.navigate("HomeScreen")}>
                     <Image style={styles.searchimg} source={require('../../Images/back.png')} />
                 </Pressable>
-                <Pressable onPress={() => savetodo()}>
+                <Pressable onPress={() => saveTodo()}>
                     <Image style={styles.saveimg} source={require('../../Images/diskette.png')} />
                 </Pressable>
             </View>
             <View style={styles.back}>
-                <TextInput placeholder="Title"  style={[styles.addtitle,{fontSize: 39 }]} placeholderTextColor="white"value={title} onChangeText={(txt) => seTitle(txt)} />
                 
-                <TextInput placeholder="Type Something" placeholderTextColor="white"style={styles.adddesc} value={desc} onChangeText={(txt) => setDesc(txt)} multiline/>
-                
+                <TextInput placeholder="Title" style={[styles.addtitle, { fontSize: 39 }]} placeholderTextColor="white" value={title} onChangeText={(txt) => setTitle(txt)} />
+                <TextInput placeholder="Type Something" placeholderTextColor="white" style={styles.adddesc} value={desc} onChangeText={(txt) => setDesc(txt)} multiline />
             </View>
         </View>
     );
 };
+
 const styles = StyleSheet.create({
     back: {
         flexDirection: "column",
@@ -61,17 +64,17 @@ const styles = StyleSheet.create({
     },
     addtitle: {
         width: windowWidth,
-        fontSize:30,
-        padding:10,
+        fontSize: 30,
+        padding: 10,
         height: "10%",
-        color:'white',
+        color: 'white',
         backgroundColor: 'black'
     },
     adddesc: {
         width: windowWidth,
-        fontSize:20,
-        padding:10,
-        color:'white',
+        fontSize: 20,
+        padding: 10,
+        color: 'white',
         height: windowHeight,
         backgroundColor: 'black'
     },
@@ -90,7 +93,7 @@ const styles = StyleSheet.create({
         height: "10%",
         marginTop: 60,
         gap: 10,
-        justifyContent:'space-between',
+        justifyContent: 'space-between',
         flexDirection: "row",
         alignItems: "center"
     },
@@ -103,5 +106,4 @@ const styles = StyleSheet.create({
 });
 
 export default AddTodo;
-
 
