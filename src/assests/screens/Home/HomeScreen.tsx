@@ -3,6 +3,7 @@ import { StyleSheet, View, Text, Pressable, Image, Dimensions, TextInput, FlatLi
 import EncryptedStorage from "react-native-encrypted-storage";
 import { useIsFocused } from "@react-navigation/native";
 import { useEffect, useState } from "react";
+import { useAuth } from "../../../../AuthContext";
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -17,6 +18,8 @@ const getRandomColor = () => {
 };
 
 const HomeScreen = ({ navigation }) => {
+  const { userToken, signOut } = useAuth();
+
   const isFocused = useIsFocused();
   const [allnotes, setAll] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -72,7 +75,9 @@ const HomeScreen = ({ navigation }) => {
   return (
     <View style={styles.background}>
       <View style={styles.searchtab}>
-        <Image style={styles.searchimg} source={require('../../Images/search.png')} />
+        <Pressable onPress={() => { console.log('Signing out...'); signOut(); }}>
+          <Image style={styles.searchimg} source={require('../../Images/logout.png')} />
+        </Pressable>
         <TextInput
           style={styles.input}
           placeholder="Search..."

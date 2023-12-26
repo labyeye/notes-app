@@ -17,7 +17,16 @@ const RegisterScreen = ({ navigation }) => {
   
       // For demonstration, store user credentials in AsyncStorage
       const userCredentials = { name, email, password };
-      await AsyncStorage.setItem(email, JSON.stringify(userCredentials));
+  
+      // Retrieve existing user data from AsyncStorage
+      const existingDataString = await AsyncStorage.getItem('allUserCredentials');
+      let allUserCredentials = existingDataString ? JSON.parse(existingDataString) : [];
+  
+      // Add the new user to the array
+      allUserCredentials.push(userCredentials);
+  
+      // Update the AsyncStorage with the new array of user data
+      await AsyncStorage.setItem('allUserCredentials', JSON.stringify(allUserCredentials));
   
       // Navigate to the login screen
       navigation.navigate('LoginScreen');
@@ -26,6 +35,7 @@ const RegisterScreen = ({ navigation }) => {
       // Handle registration error (show error message to the user)
     }
   };
+  
   
   
 

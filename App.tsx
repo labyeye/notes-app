@@ -14,6 +14,7 @@ import StatTodo from "./src/assests/screens/TodoStat/StatTodo";
 import LoginScreen from "./src/assests/screens/LoginScreen/LoginScreen";
 import RegisterScreen from "./src/assests/screens/RegisterScreen/RegisterScreen";
 import { AuthProvider } from "./AuthContext";
+import { navigationRef } from "./navigationRef";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -56,7 +57,7 @@ const App = () => {
   }, []);
 
   return (
-    <NavigationContainer>
+    <NavigationContainer ref={navigationRef}>
       <AuthProvider>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         

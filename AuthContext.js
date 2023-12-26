@@ -1,5 +1,7 @@
+// AuthProvider.js
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { navigationRef, navigate } from './navigationRef'; // Import the navigationRef
 
 const AuthContext = createContext();
 
@@ -21,9 +23,16 @@ export const AuthProvider = ({ children }) => {
   };
 
   const signOut = async () => {
-    // Clear user authentication token from AsyncStorage
-    await AsyncStorage.removeItem('userToken');
-    setUserToken(null);
+    try {
+      // Clear user authentication token from AsyncStorage
+      await AsyncStorage.removeItem('userToken');
+      setUserToken(null);
+
+      // Navigate to the LoginScreen using the navigate function
+      navigate('LoginScreen');
+    } catch (error) {
+      console.error('Sign out failed:', error);
+    }
   };
 
   return (
