@@ -14,7 +14,7 @@ const AddTodo = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.searchtab}>
-        <Pressable onPress={() => navigation.navigate("HomeScreen")}>
+        <Pressable onPress={() => navigation.navigate('Main', { screen: 'HomeScreen' })}>
           <Image style={styles.searchimg} source={require('../../Images/back.png')} />
         </Pressable>
         <View style={styles.categoryTab}>
