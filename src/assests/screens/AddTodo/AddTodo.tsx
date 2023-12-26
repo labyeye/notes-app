@@ -1,109 +1,87 @@
-import * as React from "react";
-import { StyleSheet, View, Text, Pressable, Image, Dimensions, TextInput, TouchableOpacity } from "react-native";
-import { useState } from "react";
-import EncryptedStorage from "react-native-encrypted-storage";
+import React, { useState } from "react";
+import { Dimensions, Image, Pressable, StyleSheet, TextInput, View, Text } from "react-native";
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 const AddTodo = ({ navigation }) => {
-    const [title, setTitle] = useState("");
-    const [desc, setDesc] = useState("");
-    const [category, setCategory] = useState("Regular");
+  const [selectedCategory, setSelectedCategory] = useState("Regular");
 
-    const saveTodo = async () => {
-        try {
-            // Retrieve existing todos
-            let existingTodos = await EncryptedStorage.getItem('todos');
-            existingTodos = existingTodos ? JSON.parse(existingTodos).data : [];
+  const handleCategoryPress = (category) => {
+    setSelectedCategory(category);
+  };
 
-            // Ensure existingTodos is an array
-            if (!Array.isArray(existingTodos)) {
-                existingTodos = [];
-            }
-
-            // Add the new todo with category
-            const newTodo = { title, desc, category };
-            existingTodos.push(newTodo);
-
-            // Save the updated todos
-            await EncryptedStorage.setItem('todos', JSON.stringify({ data: existingTodos }));
-
-            // Navigate back
-            navigation.goBack();
-        } catch (error) {
-            console.error('Error saving todo:', error);
-        }
-    };
-    
-
-    return (
-        <View style={styles.background}>
-            <View style={styles.searchtab}>
-                <Pressable onPress={() => navigation.navigate("HomeScreen")}>
-                    <Image style={styles.searchimg} source={require('../../Images/back.png')} />
-                </Pressable>
-                <Pressable onPress={() => saveTodo()}>
-                    <Image style={styles.saveimg} source={require('../../Images/diskette.png')} />
-                </Pressable>
-            </View>
-            <View style={styles.back}>
-                
-                <TextInput placeholder="Title" style={[styles.addtitle, { fontSize: 39 }]} placeholderTextColor="white" value={title} onChangeText={(txt) => setTitle(txt)} />
-                <TextInput placeholder="Type Something" placeholderTextColor="white" style={styles.adddesc} value={desc} onChangeText={(txt) => setDesc(txt)} multiline />
-            </View>
+  return (
+    <View style={styles.container}>
+      <View style={styles.searchtab}>
+        <Pressable onPress={() => navigation.navigate("HomeScreen")}>
+          <Image style={styles.searchimg} source={require('../../Images/back.png')} />
+        </Pressable>
+        <View style={styles.categoryTab}>
+          <Pressable onPress={() => handleCategoryPress("Regular")}>
+            <Text style={[styles.categoryText, selectedCategory === "Regular" && styles.selectedCategory]}>
+              Regular
+            </Text>
+          </Pressable>
+          <Pressable onPress={() => handleCategoryPress("Occasional")}>
+            <Text style={[styles.categoryText, selectedCategory === "Occasional" && styles.selectedCategory]}>
+              Occasional
+            </Text>
+          </Pressable>
         </View>
-    );
-};
+      </View>
+      {/* Add the rest of your components here */}
+    </View>
+  );
+}
 
 const styles = StyleSheet.create({
-    back: {
-        flexDirection: "column",
-        width: "100%",
-        alignItems: "center"
-    },
-    addtitle: {
-        width: windowWidth,
-        fontSize: 30,
-        padding: 10,
-        height: "10%",
-        color: 'white',
-        backgroundColor: 'black'
-    },
-    adddesc: {
-        width: windowWidth,
-        fontSize: 20,
-        padding: 10,
-        color: 'white',
-        height: windowHeight,
-        backgroundColor: 'black'
-    },
-    searchimg: {
-        width: 30,
-        height: 30,
-        marginLeft: 30,
-    },
-    saveimg: {
-        width: 30,
-        height: 30,
-        marginRight: 30,
-    },
-    searchtab: {
-        width: "100%",
-        height: "10%",
-        marginTop: 60,
-        gap: 10,
-        justifyContent: 'space-between',
-        flexDirection: "row",
-        alignItems: "center"
-    },
-    background: {
-        height: windowHeight,
-        backgroundColor: 'black',
-        flexDirection: 'column',
-        alignItems: 'center',
-    },
+  container: {
+    height: windowHeight,
+    width: windowWidth,
+    backgroundColor: 'black',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  plusimg: {
+    width: 20,
+    height: 20,
+    marginLeft: 10,
+  },
+  input: {
+    width: "65%",
+    height: "60%",
+    borderColor: 'gray',
+    borderWidth: 3,
+    borderRadius: 20,
+    marginLeft: 10,
+    color: 'white'
+  },
+  searchimg: {
+    width: 20,
+    height: 20,
+    marginLeft: 30,
+  },
+  searchtab: {
+    width: "100%",
+    height: "10%",
+    marginTop: 60,
+    gap: 10,
+    flexDirection: "row",
+    alignItems: "center"
+  },
+  categoryTab: {
+    flexDirection: "row",
+    marginLeft: "auto",
+    marginRight: 10,
+  },
+  categoryText: {
+    color: "white",
+    marginHorizontal: 10,
+  },
+  selectedCategory: {
+    fontWeight: "bold", // You can customize the styling for the selected category
+  },
 });
 
 export default AddTodo;
-

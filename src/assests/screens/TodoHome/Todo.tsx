@@ -3,6 +3,7 @@ import { StyleSheet, View, Text, Pressable, Image, Dimensions, TextInput, FlatLi
 import EncryptedStorage from "react-native-encrypted-storage";
 import { useIsFocused } from "@react-navigation/native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
+import StatTodo from "../TodoStat";
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
@@ -28,9 +29,11 @@ const TodoHome = ({ navigation }) => {
     getAllTodos();
   }, [isFocused]);
 
-  const handleCheckboxPress = () => {
-    setCheckboxCount((prevCount) => prevCount + 1);
+  const handledone = () => {
+    setCheckboxCount(prevCount => prevCount + 1);
+    console.log(checkboxCount);
   };
+
 
   const deleteTodo = async (index) => {
     try {
@@ -62,14 +65,12 @@ const TodoHome = ({ navigation }) => {
       <TouchableOpacity>
         <View style={[styles.notetab, { backgroundColor: noteColor }]}>
           <View style={{ width: "80%", height: "50%", flexDirection: "row" }}>
-            <BouncyCheckbox
-              size={25}
-              
-              unfillColor="#FFFFFF"
-              isChecked={false}  // You can set it to true or false based on the initial state
-              onPress={() => handleCheckboxPress}
-              style={{ marginTop: 40, marginLeft: 10 }}
-            />
+            <View style={{justifyContent:"center",height:"100%"}}>
+              <TouchableOpacity style={{justifyContent:'center',alignItems:"center",width:'80%',height:"50%",marginLeft:20,borderColor:'black',borderWidth:1}}
+              onPress={handledone}>
+                <Text>Done</Text>
+              </TouchableOpacity>
+            </View>
             <View style={{ flexDirection: "column" }}>
               <Text style={styles.title}>{item.title}</Text>
               <Text style={styles.desc}>{item.desc}</Text>
@@ -106,6 +107,7 @@ const TodoHome = ({ navigation }) => {
           keyExtractor={(item, index) => index.toString()}
         />
       </View>
+      <StatTodo completedCount={checkboxCount} />
     </View>
   );
 };

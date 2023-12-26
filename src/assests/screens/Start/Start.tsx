@@ -1,5 +1,5 @@
 import React from "react";
-import { Image,Dimensions, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {Dimensions, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import LottieView from "lottie-react-native";
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -12,7 +12,7 @@ const Start = ({navigation}) => {
                     source={require('../../Animations/notes.json')} autoPlay={true} loop={true}/>
                 <Text style={styles.title}>Noty</Text>
                 <Text style={styles.desc}>"Think, Note, Thrive."</Text>
-                <TouchableOpacity style={styles.getbtn} onPress={() => navigation.navigate('HomeScreen')}>
+                <TouchableOpacity style={styles.getbtn} onPress={() => navigation.navigate('LoginScreen')}>
                     <Text style={{textAlign:"center"}}>Get Started</Text>
                 </TouchableOpacity>
             </View>

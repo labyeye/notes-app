@@ -11,6 +11,7 @@ import { Image, View } from "react-native";
 import AddTodo from "./src/assests/screens/AddTodo/AddTodo";
 import EditTodo from "./src/assests/screens/EditTodo";
 import StatTodo from "./src/assests/screens/TodoStat/StatTodo";
+import LoginScreen from "./src/assests/screens/LoginScreen/LoginScreen";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -55,20 +56,23 @@ const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        {hideSplashScreen ? (
-          <Stack.Screen name="Start" component={Start} />
-        ) : (
+        
+      <Stack.Screen
+            name="Start"
+            component={Start}
+            options={{ headerShown: false }}
+          />
           <Stack.Screen
             name="Main"
             component={TabNavigator}
             options={{ headerShown: false }}
           />
-        )}
+
         <Stack.Screen name="EditNotesScreen" component={EditNotesScreen} />
         <Stack.Screen name="EditTodo" component={EditTodo} />
         <Stack.Screen name="AddNotes" component={AddNotes} />
         <Stack.Screen name="AddTodo" component={AddTodo} />
-        <Stack.Screen name="StatTodo" component={StatTodo} />
+        <Stack.Screen name="LoginScreen" component={LoginScreen} />
 
 
       </Stack.Navigator>

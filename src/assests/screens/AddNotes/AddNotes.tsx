@@ -31,7 +31,7 @@ const AddNotes = ({ navigation }) => {
     return (
         <View style={styles.background}>
             <View style={styles.searchtab}>
-                <Pressable onPress={() => navigation.navigate("HomeScreen")}>
+                <Pressable onPress={() => navigation.navigate("Home")}>
                     <Image style={styles.searchimg} source={require('../../Images/back.png')} />
                 </Pressable>
                 <Pressable onPress={() => savenote()}>
