@@ -12,6 +12,8 @@ import AddTodo from "./src/assests/screens/AddTodo/AddTodo";
 import EditTodo from "./src/assests/screens/EditTodo";
 import StatTodo from "./src/assests/screens/TodoStat/StatTodo";
 import LoginScreen from "./src/assests/screens/LoginScreen/LoginScreen";
+import RegisterScreen from "./src/assests/screens/RegisterScreen/RegisterScreen";
+import { AuthProvider } from "./AuthContext";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -55,27 +57,30 @@ const App = () => {
 
   return (
     <NavigationContainer>
+      <AuthProvider>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         
-      <Stack.Screen
-            name="Start"
-            component={Start}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Main"
-            component={TabNavigator}
-            options={{ headerShown: false }}
-          />
-
-        <Stack.Screen name="EditNotesScreen" component={EditNotesScreen} />
-        <Stack.Screen name="EditTodo" component={EditTodo} />
-        <Stack.Screen name="AddNotes" component={AddNotes} />
-        <Stack.Screen name="AddTodo" component={AddTodo} />
-        <Stack.Screen name="LoginScreen" component={LoginScreen} />
-
-
-      </Stack.Navigator>
+        <Stack.Screen
+              name="Start"
+              component={Start}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Main"
+              component={TabNavigator}
+              options={{ headerShown: false }}
+            />
+  
+          <Stack.Screen name="EditNotesScreen" component={EditNotesScreen} />
+          <Stack.Screen name="EditTodo" component={EditTodo} />
+          <Stack.Screen name="AddNotes" component={AddNotes} />
+          <Stack.Screen name="AddTodo" component={AddTodo} />
+          <Stack.Screen name="LoginScreen" component={LoginScreen} />
+          <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
+  
+  
+        </Stack.Navigator>
+      </AuthProvider>
     </NavigationContainer>
   );
 };
