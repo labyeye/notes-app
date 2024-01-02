@@ -1,61 +1,109 @@
 import * as React from "react";
-import { StyleSheet, View, Text, Pressable, Image, Dimensions, TextInput, FlatList, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  Pressable,
+  Image,
+  Dimensions,
+  TextInput,
+  FlatList,
+  TouchableOpacity,
+} from "react-native";
 import EncryptedStorage from "react-native-encrypted-storage";
 import { useIsFocused } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../../../AuthContext";
-
-const windowWidth = Dimensions.get('window').width;
-const windowHeight = Dimensions.get('window').height;
-
-const getRandomColor = () => {
-  const letters = '0123456789ABCDEF';
-  let color = '#';
-  for (let i = 0; i < 6; i++) {
-    color += letters[Math.floor(Math.random() * 16)];
-  }
-  return color;
-};
+const colors = ["#ADE8F4", "#90E0EF", "#48CAE4","#0096C7","#0077B6","#CAF0F8"];
+const windowWidth = Dimensions.get("window").width;
+const windowHeight = Dimensions.get("window").height;
 
 const HomeScreen = ({ navigation }) => {
   const { userToken, signOut } = useAuth();
-
+  const [noteColors, setNoteColors] = useState({});
   const isFocused = useIsFocused();
   const [allnotes, setAll] = useState([]);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [allColors, setAllColors] = useState({});
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     getAllNotes();
   }, [isFocused]);
 
-  const deleteNote = async index => {
+  
+
+  const getNoteColor = (index) => {
+    if (noteColors[index]) {
+       return noteColors[index];
+    } else {
+       const randomColor = colors[Math.floor(Math.random() * colors.length)];
+       setNoteColors((prevColors) => ({ ...prevColors, [index]: randomColor }));
+       return randomColor;
+    }
+   };
+
+  const saveNote = async (newNote) => {
     let temp = allnotes.slice();
-    temp.splice(index, 1);
-    await EncryptedStorage.setItem('notes', JSON.stringify({ data: temp }));
+    let tempColors = { ...allColors };
+
+    const noteIndex = temp.length;
+    const noteColor = tempColors[noteIndex] || getRandomColor();
+
+    temp.push(newNote);
+    tempColors[noteIndex] = noteColor;
+
+    await EncryptedStorage.setItem("notes", JSON.stringify({ data: temp }));
+    await EncryptedStorage.setItem("noteColors", JSON.stringify(tempColors));
+
     getAllNotes();
-  }
+  };
+
+  const deleteNote = async (index) => {
+    let newColors = { ...noteColors };
+    delete newColors[index];
+    setNoteColors(newColors);
+    let temp = allnotes.slice();
+    let tempColors = { ...allColors };
+
+    temp.splice(index, 1);
+    delete tempColors[index];
+
+    await EncryptedStorage.setItem("notes", JSON.stringify({ data: temp }));
+    await EncryptedStorage.setItem("noteColors", JSON.stringify(tempColors));
+
+    getAllNotes();
+  };
 
   const navigateToEditScreen = (index) => {
     const noteToEdit = allnotes[index];
-    navigation.navigate("EditNotesScreen", { noteToEdit, index, allnotes, onNoteUpdate: getAllNotes });
-  }
+    navigation.navigate("EditNotesScreen", {
+      noteToEdit,
+      index,
+      allnotes,
+      onNoteUpdate: getAllNotes,
+    });
+  };
 
   const getAllNotes = async () => {
     let x = [];
-    let y = await EncryptedStorage.getItem('notes');
+    let y = await EncryptedStorage.getItem("notes");
     let data = JSON.parse(y);
     if (data && data.data) {
-      data.data.map(item => {
-        x.push(item);
-      });
+      x = data.data;
     }
     setAll(x);
+
+    let colorData = await EncryptedStorage.getItem("noteColors");
+    let colors = JSON.parse(colorData);
+    setAllColors(colors || {});
   };
 
-  const filteredNotes = allnotes.filter(item => item.title.toLowerCase().includes(searchQuery.toLowerCase()));
+  const filteredNotes = allnotes.filter((item) =>
+    item.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const renderItem = ({ item, index }) => {
-    const noteColor = getRandomColor();
+    const noteColor = getNoteColor(index);
 
     return (
       <TouchableOpacity onPress={() => navigateToEditScreen(index)}>
@@ -64,8 +112,11 @@ const HomeScreen = ({ navigation }) => {
             <Text style={styles.title}>{item.title}</Text>
             <Text style={styles.desc}>{item.desc}</Text>
           </View>
-          <TouchableOpacity style={{ height: "100%", justifyContent: 'center' }} onPress={() => deleteNote(index)}>
-            <Image style={styles.delete} source={require('../../Images/bin.png')} />
+          <TouchableOpacity
+            style={{ height: "100%", justifyContent: "center" }}
+            onPress={() => deleteNote(index)}
+          >
+            <Image style={styles.delete} source={require("../../Images/bin.png")} />
           </TouchableOpacity>
         </View>
       </TouchableOpacity>
@@ -82,7 +133,7 @@ const HomeScreen = ({ navigation }) => {
           onChangeText={(text) => setSearchQuery(text)}
         />
         <Pressable onPress={() => navigation.navigate("AddNotes")}>
-          <Image style={styles.plusimg} source={require('../../Images/plus.png')} />
+          <Image style={styles.plusimg} source={require("../../Images/plus.png")} />
         </Pressable>
       </View>
       <View style={styles.noteback}>
@@ -93,27 +144,24 @@ const HomeScreen = ({ navigation }) => {
         />
       </View>
     </View>
-    
   );
-  
-  
 };
 
 const styles = StyleSheet.create({
   delete: {
-    position: 'absolute',
+    position: "absolute",
     width: 40,
     height: 40,
   },
   title: {
     marginLeft: 10,
     marginTop: 10,
-    fontSize: 30
+    fontSize: 30,
   },
   desc: {
     marginLeft: 10,
     marginTop: 10,
-    fontSize: 20
+    fontSize: 20,
   },
   plusimg: {
     width: 20,
@@ -128,11 +176,11 @@ const styles = StyleSheet.create({
   input: {
     width: "85%",
     height: "60%",
-    borderColor: 'gray',
+    borderColor: "gray",
     borderWidth: 3,
     borderRadius: 20,
     marginLeft: 10,
-    color: 'white'
+    color: "white",
   },
   searchtab: {
     width: "100%",
@@ -140,28 +188,28 @@ const styles = StyleSheet.create({
     marginTop: 60,
     gap: 10,
     flexDirection: "row",
-    alignItems: "center"
+    alignItems: "center",
   },
   background: {
     height: windowHeight,
     width: windowWidth,
-    backgroundColor: 'black',
-    flexDirection: 'column',
-    alignItems: 'center',
+    backgroundColor: "black",
+    flexDirection: "column",
+    alignItems: "center",
   },
   notetab: {
     borderRadius: 10,
     marginTop: 10,
-    flexDirection: 'row',
+    flexDirection: "row",
     height: 100,
-    backgroundColor: '#fcaf08',
+    backgroundColor: "#fcaf08",
     width: "100%",
-    gap: 20
+    gap: 20,
   },
   noteback: {
     height: windowHeight,
     width: windowWidth,
-  }
+  },
 });
 
 export default HomeScreen;

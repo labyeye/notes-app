@@ -2,83 +2,108 @@ import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Text, Pressable, Image, Dimensions, TextInput, FlatList, TouchableOpacity } from "react-native";
 import EncryptedStorage from "react-native-encrypted-storage";
 import { useIsFocused } from "@react-navigation/native";
-import BouncyCheckbox from "react-native-bouncy-checkbox";
 import StatTodo from "../TodoStat";
+
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-const getRandomColor = () => {
-  const letters = '0123456789ABCDEF';
-  let color = '#';
-  for (let i = 0; i < 6; i++) {
-    color += letters[Math.floor(Math.random() * 16)];
-  }
-  return color;
-};
-
 const TodoHome = ({ navigation }) => {
-
+  const colors = ["#ADE8F4", "#90E0EF", "#48CAE4", "#0096C7", "#0077B6", "#CAF0F8"];
+  const [showDoneAnimation, setShowDoneAnimation] = React.useState(false);
   const isFocused = useIsFocused();
+  const [noteColors, setNoteColors] = useState({});
+
   const [alltodos, setAllTodos] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [checkboxCount, setCheckboxCount] = useState(0);
-  
-
-
-  useEffect(() => {
-    getAllTodos();
-  }, [isFocused]);
 
   const handledone = () => {
     setCheckboxCount(prevCount => prevCount + 1);
-    console.log(checkboxCount);
+    setShowDoneAnimation(true);
+    setTimeout(() => {
+      setShowDoneAnimation(false);
+      navigation.navigate('DoneTodo');
+    }, 1000);
   };
 
-
-  const deleteTodo = async (index) => {
+  const getNoteColor = (index) => {
+    if (noteColors[index]) {
+      return noteColors[index];
+    } else {
+      const randomColor = colors[Math.floor(Math.random() * colors.length)];
+      setNoteColors((prevColors) => ({ ...prevColors, [index]: randomColor }));
+      return randomColor;
+    }
+  };
+  const handleDelete = async (index, category) => {
     try {
-      let temp = alltodos.slice();
-      temp.splice(index, 1);
-      await EncryptedStorage.setItem('todos', JSON.stringify({ data: temp }));
-      getAllTodos();
+      // Filter todos based on the category
+      const filteredTodos = alltodos.filter(todo => todo.category === category);
+  
+      // Create a copy of the filtered todos array
+      const updatedTodos = [...filteredTodos];
+  
+      // Remove the todo at the specified index
+      updatedTodos.splice(index, 1);
+  
+      // Create a copy of alltodos and remove the existing category
+      const newAllTodos = alltodos.filter(todo => todo.category !== category);
+  
+      // Concatenate the new todos and the updated todos
+      const finalTodos = newAllTodos.concat(updatedTodos);
+  
+      // Update state with the new todos
+      setAllTodos(finalTodos);
+  
+      // Save the updated todos to storage
+      await EncryptedStorage.setItem('todo', JSON.stringify({ data: finalTodos }));
     } catch (error) {
       console.error('Error deleting todo:', error);
     }
   };
 
+  useEffect(() => {
+    getAllTodos();
+  }, [isFocused]);
+
   const getAllTodos = async () => {
-    let todos = [];
-    let storedTodos = await EncryptedStorage.getItem('todos');
-    let data = JSON.parse(storedTodos);
-    if (data && data.data) {
-      data.data.forEach(item => {
-        todos.push(item);
-      });
+    try {
+      let storedTodos = await EncryptedStorage.getItem('todo');
+      let data = JSON.parse(storedTodos);
+
+      if (data && data.data) {
+        setAllTodos(data.data);
+      }
+    } catch (error) {
+      console.error("Error retrieving todos:", error);
     }
-    setAllTodos(todos);
   };
 
+
+  console.log("Regular todos:", alltodos.filter(todo => todo.category === "Regular").length);
+
   const renderItem = ({ item, index }) => {
-    const noteColor = getRandomColor();
+    const noteColor = getNoteColor(index);
 
     return (
       <TouchableOpacity>
         <View style={[styles.notetab, { backgroundColor: noteColor }]}>
-          <View style={{ width: "80%", height: "50%", flexDirection: "row" }}>
-            <View style={{justifyContent:"center",height:"100%"}}>
-              <TouchableOpacity style={{justifyContent:'center',alignItems:"center",width:'80%',height:"50%",marginLeft:20,borderColor:'black',borderWidth:1}}
-              onPress={handledone}>
+          <View style={{ width: "80%", height: "100%", flexDirection: "row" }}>
+            <View style={{ justifyContent: "center", height: "100%", alignItems: "center", width: '25%', alignSelf: 'flex-start', borderColor: 'black' }}>
+              <TouchableOpacity style={{ justifyContent: 'center', alignItems: "center", width: "80%", borderColor: 'black', marginLeft: 10, borderWidth: 1, borderRadius: 20 }}
+                onPress={handledone}>
                 <Text>Done</Text>
               </TouchableOpacity>
             </View>
-            <View style={{ flexDirection: "column" }}>
+            <View style={{ justifyContent: 'center' }}>
               <Text style={styles.title}>{item.title}</Text>
-              <Text style={styles.desc}>{item.desc}</Text>
             </View>
+
           </View>
-          <TouchableOpacity style={{ height: "100%", justifyContent: 'center' }} onPress={() => deleteTodo(index)}>
+          <Pressable style={{ height: "100%", justifyContent: 'center' }} onPress={() => handleDelete(index, item.category)}>
             <Image style={styles.delete} source={require('../../Images/bin.png')} />
-          </TouchableOpacity>
+          </Pressable>
+
         </View>
       </TouchableOpacity>
     );
@@ -100,11 +125,22 @@ const TodoHome = ({ navigation }) => {
           <Image style={styles.plusimg} source={require('../../Images/plus.png')} />
         </Pressable>
       </View>
+      <Text style={{ color: 'white', fontSize: 20, marginBottom: 10 }}>Regular Todos</Text>
       <View style={styles.noteback}>
         <FlatList
-          data={alltodos}
+          data={alltodos.filter(todo => todo.category === "Regular")}
           renderItem={renderItem}
-          keyExtractor={(item, index) => index.toString()}
+          keyExtractor={(item, index) => `Regular_${index}`}
+
+        />
+      </View>
+      <Text style={{ color: 'white', fontSize: 20, marginTop: 15 }}>Occasional Todos</Text>
+      <View style={styles.noteback}>
+        <FlatList
+          data={alltodos.filter(todo => todo.category === "Occasional")}
+          renderItem={renderItem}
+          keyExtractor={(item, index) => `Occasional_${index}`}
+
         />
       </View>
       <StatTodo completedCount={checkboxCount} />
@@ -135,9 +171,9 @@ const styles = StyleSheet.create({
     height: 40,
   },
   title: {
-    marginLeft: 50,
-    marginTop: 5,
-    fontSize: 30
+    width: "60%",
+    marginLeft: 10,
+    fontSize: 25
   },
   desc: {
     marginLeft: 10,
@@ -179,14 +215,14 @@ const styles = StyleSheet.create({
     borderColor: "white",
     marginTop: 35,
     marginLeft: 10
-
   },
   checkedCheckbox: {
     backgroundColor: "white",
   },
   noteback: {
-    height: windowHeight,
+    height: "30%",
     width: windowWidth,
+    marginTop: 10
   }
 });
 

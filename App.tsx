@@ -15,6 +15,7 @@ import LoginScreen from "./src/assests/screens/LoginScreen/LoginScreen";
 import RegisterScreen from "./src/assests/screens/RegisterScreen/RegisterScreen";
 import { AuthProvider } from "./AuthContext";
 import { navigationRef } from "./navigationRef";
+import DoneTodo from "./src/assests/screens/DoneTodo/DoneTodo";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -76,6 +77,8 @@ const App = () => {
           <Stack.Screen name="EditTodo" component={EditTodo} />
           <Stack.Screen name="AddNotes" component={AddNotes} />
           <Stack.Screen name="AddTodo" component={AddTodo} />  
+
+          <Stack.Screen name="DoneTodo" component={DoneTodo} />  
         </Stack.Navigator>
       </AuthProvider>
     </NavigationContainer>
