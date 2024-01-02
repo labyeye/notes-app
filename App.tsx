@@ -75,11 +75,7 @@ const App = () => {
           <Stack.Screen name="EditNotesScreen" component={EditNotesScreen} />
           <Stack.Screen name="EditTodo" component={EditTodo} />
           <Stack.Screen name="AddNotes" component={AddNotes} />
-          <Stack.Screen name="AddTodo" component={AddTodo} />
-          <Stack.Screen name="LoginScreen" component={LoginScreen} />
-          <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
-  
-  
+          <Stack.Screen name="AddTodo" component={AddTodo} />  
         </Stack.Navigator>
       </AuthProvider>
     </NavigationContainer>

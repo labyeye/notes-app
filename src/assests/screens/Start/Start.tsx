@@ -12,7 +12,7 @@ const Start = ({navigation}) => {
                     source={require('../../Animations/notes.json')} autoPlay={true} loop={true}/>
                 <Text style={styles.title}>Noty</Text>
                 <Text style={styles.desc}>"Think, Note, Thrive."</Text>
-                <TouchableOpacity style={styles.getbtn} onPress={() => navigation.navigate('LoginScreen')}>
+                <TouchableOpacity style={styles.getbtn} onPress={() => navigation.navigate('Main', { screen: 'HomeScreen' })}>
                     <Text style={{textAlign:"center"}}>Get Started</Text>
                 </TouchableOpacity>
             </View>

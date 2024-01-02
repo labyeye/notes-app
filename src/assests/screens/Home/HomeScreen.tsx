@@ -75,9 +75,6 @@ const HomeScreen = ({ navigation }) => {
   return (
     <View style={styles.background}>
       <View style={styles.searchtab}>
-        <Pressable onPress={() => { console.log('Signing out...'); signOut(); }}>
-          <Image style={styles.searchimg} source={require('../../Images/logout.png')} />
-        </Pressable>
         <TextInput
           style={styles.input}
           placeholder="Search..."
@@ -129,7 +126,7 @@ const styles = StyleSheet.create({
     marginLeft: 30,
   },
   input: {
-    width: "65%",
+    width: "85%",
     height: "60%",
     borderColor: 'gray',
     borderWidth: 3,
@@ -153,7 +150,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   notetab: {
-    borderRadius: 20,
+    borderRadius: 10,
     marginTop: 10,
     flexDirection: 'row',
     height: 100,
