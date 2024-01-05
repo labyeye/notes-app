@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useState } from "react";
 import {
    Dimensions,
@@ -26,13 +27,17 @@ const AddTodo = ({ navigation }) => {
    };
    const savetodo = async () => {
       try {
-        let existingTodo = await EncryptedStorage.getItem('todo');
+        let existingTodo = await AsyncStorage.getItem('todo');
         existingTodo = existingTodo ? JSON.parse(existingTodo).data : [];
-    
+      //   await AsyncStorage.setItem('chec', JSON.stringify({
+      //    '0' : 3 
+      //   }))
+        let response = await AsyncStorage.getItem('chec');
+        console.log("Resp:",[response]);
         const newTodo = { title, desc, category: selectedCategory };
         existingTodo.push(newTodo);
     
-        await EncryptedStorage.setItem('todo', JSON.stringify({ data: existingTodo }));
+        await AsyncStorage.setItem('todo', JSON.stringify({ data: existingTodo }));
     
         navigation.goBack();
       } catch (error) {

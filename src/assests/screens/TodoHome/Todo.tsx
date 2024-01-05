@@ -3,6 +3,7 @@ import { StyleSheet, View, Text, Pressable, Image, Dimensions, TextInput, FlatLi
 import EncryptedStorage from "react-native-encrypted-storage";
 import { useIsFocused } from "@react-navigation/native";
 import StatTodo from "../TodoStat";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -12,28 +13,47 @@ const TodoHome = ({ navigation }) => {
   const [showDoneAnimation, setShowDoneAnimation] = React.useState(false);
   const isFocused = useIsFocused();
   const [noteColors, setNoteColors] = useState({});
-
+  const [regularCheckboxCount, setRegularCheckboxCount] = useState<Record<string, number>>({});
   const [alltodos, setAllTodos] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [checkboxCount, setCheckboxCount] = useState(0);
 
-  const handledone = (category, index) => {
-    setCheckboxCount(prevCount => prevCount + 1);
+  useEffect(() => {
+    navigation.setParams({
+      regularCheckboxCount: regularCheckboxCount,
+    });
+    console.log(["check",JSON.stringify(regularCheckboxCount)])
+    AsyncStorage.setItem('checkbox', JSON.stringify(regularCheckboxCount));
+  }, [regularCheckboxCount]);
+
+  const handledone = async (category, index) => {
     setShowDoneAnimation(true);
     setTimeout(() => {
       setShowDoneAnimation(false);
+      if (category === "Regular") {
+        setRegularCheckboxCount((prevCounts) => {
+          const updatedCounts = { ...prevCounts, [index]: (prevCounts[index] || 0) + 1 };
+          console.log("Index",[index]);
+          return updatedCounts;
+        });
 
-      // Check if the category is "Occasional" before initiating deletion
-      if (category === "Occasional") {
-        handleDelete(index, category);
-        navigation.navigate('DoneTodo');
+        // Add the marked todo to the 0 screen
+        const updatedTodo = alltodos.find((todo, i) => todo.category === "Regular" && i === index);
+        navigation.navigate("StatTodo", { updatedTodo });
+        console.log(updatedTodo)
       }
-      else{
-        navigation.navigate('DoneTodo');
-      }
-    }, 1000);
-  };
+    }, 10);
 
+    try {
+      const storedTodos = await AsyncStorage.getItem('todo');
+      let data = JSON.parse(storedTodos);
+
+      if (data && data.data) {
+        setAllTodos(data.data);
+      }
+    } catch (error) {
+      console.error("Error retrieving todos:", error);
+    }
+};
   const getNoteColor = (index) => {
     if (noteColors[index]) {
       return noteColors[index];
@@ -45,26 +65,13 @@ const TodoHome = ({ navigation }) => {
   };
   const handleDelete = async (index, category) => {
     try {
-      // Filter todos based on the category
       const filteredTodos = alltodos.filter(todo => todo.category === category);
-
-      // Create a copy of the filtered todos array
       const updatedTodos = [...filteredTodos];
-
-      // Remove the todo at the specified index
       updatedTodos.splice(index, 1);
-
-      // Create a copy of alltodos and remove the existing category
       const newAllTodos = alltodos.filter(todo => todo.category !== category);
-
-      // Concatenate the new todos and the updated todos
       const finalTodos = newAllTodos.concat(updatedTodos);
-
-      // Update state with the new todos
       setAllTodos(finalTodos);
-
-      // Save the updated todos to storage
-      await EncryptedStorage.setItem('todo', JSON.stringify({ data: finalTodos }));
+      await AsyncStorage.setItem('todo', JSON.stringify({ data: finalTodos }));
     } catch (error) {
       console.error('Error deleting todo:', error);
     }
@@ -76,7 +83,7 @@ const TodoHome = ({ navigation }) => {
 
   const getAllTodos = async () => {
     try {
-      let storedTodos = await EncryptedStorage.getItem('todo');
+      let storedTodos = await AsyncStorage.getItem('todo');
       let data = JSON.parse(storedTodos);
 
       if (data && data.data) {
@@ -85,10 +92,7 @@ const TodoHome = ({ navigation }) => {
     } catch (error) {
       console.error("Error retrieving todos:", error);
     }
-  };
-
-
-  console.log("Regular todos:", alltodos.filter(todo => todo.category === "Regular").length);
+};
 
   const renderItem = ({ item, index }) => {
     const noteColor = getNoteColor(index);
@@ -96,14 +100,14 @@ const TodoHome = ({ navigation }) => {
     return (
       <TouchableOpacity>
         <View style={[styles.notetab, { backgroundColor: noteColor }]}>
-          <View style={{ width: "80%", height: "100%", flexDirection: "row" }}>
+          <View style={{ width: "80%", height: "100%", flexDirection: "row",alignSelf:'center' }}>
             <View style={{ justifyContent: "center", height: "100%", alignItems: "center", width: '25%', alignSelf: 'flex-start', borderColor: 'black' }}>
               <TouchableOpacity style={{ justifyContent: 'center', alignItems: "center", width: "80%", borderColor: 'black', marginLeft: 10, borderWidth: 1, borderRadius: 20 }}
                 onPress={() => handledone(item.category, index)}>
                 <Text>Done</Text>
               </TouchableOpacity>
             </View>
-            <View style={{ justifyContent: 'center' }}>
+            <View style={{ justifyContent: 'center' ,width:"60%",height:'60%',alignSelf:'center'}}>
               <Text style={styles.title}>{item.title}</Text>
             </View>
 
@@ -139,7 +143,6 @@ const TodoHome = ({ navigation }) => {
           data={alltodos.filter(todo => todo.category === "Regular")}
           renderItem={renderItem}
           keyExtractor={(item, index) => `Regular_${index}`}
-
         />
       </View>
       <Text style={{ color: 'white', fontSize: 20, marginTop: 15 }}>Occasional Todos</Text>
@@ -148,10 +151,9 @@ const TodoHome = ({ navigation }) => {
           data={alltodos.filter(todo => todo.category === "Occasional")}
           renderItem={renderItem}
           keyExtractor={(item, index) => `Occasional_${index}`}
-
         />
       </View>
-      <StatTodo completedCount={checkboxCount} />
+      <StatTodo regularCheckboxCount={regularCheckboxCount} navigation={navigation} />
     </View>
   );
 };
@@ -179,9 +181,12 @@ const styles = StyleSheet.create({
     height: 40,
   },
   title: {
-    width: "60%",
+    width: "100%",
+    height:"100%",
     marginLeft: 10,
-    fontSize: 25
+    fontSize: 25,
+    borderColor:'black',
+    borderWidth:1,
   },
   desc: {
     marginLeft: 10,

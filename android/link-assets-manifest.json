@@ -1,0 +1,17 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "src/assests/fonts/Salina-Trial-Bold.ttf",
+      "sha1": "7cb65feb4c3bdba372e3d4d61efb74fc9b38d736"
+    },
+    {
+      "path": "src/assests/fonts/Salina-Trial-Book.ttf",
+      "sha1": "2a36091252e270ab79e0fd404cfa1fc2e91b6266"
+    },
+    {
+      "path": "src/assests/fonts/Salina-Trial-ExtraLight.ttf",
+      "sha1": "d0ddb6569aa4637e380e1aabab94500d4e72c24c"
+    }
+  ]
+}
