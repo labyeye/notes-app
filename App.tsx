@@ -11,8 +11,6 @@ import { Image, View } from "react-native";
 import AddTodo from "./src/assests/screens/AddTodo/AddTodo";
 import EditTodo from "./src/assests/screens/EditTodo";
 import StatTodo from "./src/assests/screens/TodoStat/StatTodo";
-import LoginScreen from "./src/assests/screens/LoginScreen/LoginScreen";
-import RegisterScreen from "./src/assests/screens/RegisterScreen/RegisterScreen";
 import { AuthProvider } from "./AuthContext";
 import { navigationRef } from "./navigationRef";
 import DoneTodo from "./src/assests/screens/DoneTodo/DoneTodo";
@@ -77,7 +75,7 @@ const App = () => {
           <Stack.Screen name="EditTodo" component={EditTodo} />
           <Stack.Screen name="AddNotes" component={AddNotes} />
           <Stack.Screen name="AddTodo" component={AddTodo} />  
-
+          <Stack.Screen name="StatTodo" component={StatTodo} /> 
           <Stack.Screen name="DoneTodo" component={DoneTodo} />  
         </Stack.Navigator>
       </AuthProvider>

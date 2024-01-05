@@ -17,12 +17,20 @@ const TodoHome = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [checkboxCount, setCheckboxCount] = useState(0);
 
-  const handledone = () => {
+  const handledone = (category, index) => {
     setCheckboxCount(prevCount => prevCount + 1);
     setShowDoneAnimation(true);
     setTimeout(() => {
       setShowDoneAnimation(false);
-      navigation.navigate('DoneTodo');
+
+      // Check if the category is "Occasional" before initiating deletion
+      if (category === "Occasional") {
+        handleDelete(index, category);
+        navigation.navigate('DoneTodo');
+      }
+      else{
+        navigation.navigate('DoneTodo');
+      }
     }, 1000);
   };
 
@@ -39,22 +47,22 @@ const TodoHome = ({ navigation }) => {
     try {
       // Filter todos based on the category
       const filteredTodos = alltodos.filter(todo => todo.category === category);
-  
+
       // Create a copy of the filtered todos array
       const updatedTodos = [...filteredTodos];
-  
+
       // Remove the todo at the specified index
       updatedTodos.splice(index, 1);
-  
+
       // Create a copy of alltodos and remove the existing category
       const newAllTodos = alltodos.filter(todo => todo.category !== category);
-  
+
       // Concatenate the new todos and the updated todos
       const finalTodos = newAllTodos.concat(updatedTodos);
-  
+
       // Update state with the new todos
       setAllTodos(finalTodos);
-  
+
       // Save the updated todos to storage
       await EncryptedStorage.setItem('todo', JSON.stringify({ data: finalTodos }));
     } catch (error) {
@@ -91,7 +99,7 @@ const TodoHome = ({ navigation }) => {
           <View style={{ width: "80%", height: "100%", flexDirection: "row" }}>
             <View style={{ justifyContent: "center", height: "100%", alignItems: "center", width: '25%', alignSelf: 'flex-start', borderColor: 'black' }}>
               <TouchableOpacity style={{ justifyContent: 'center', alignItems: "center", width: "80%", borderColor: 'black', marginLeft: 10, borderWidth: 1, borderRadius: 20 }}
-                onPress={handledone}>
+                onPress={() => handledone(item.category, index)}>
                 <Text>Done</Text>
               </TouchableOpacity>
             </View>
