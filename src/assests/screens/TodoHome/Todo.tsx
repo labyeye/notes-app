@@ -64,15 +64,6 @@ const TodoHome = ({ navigation }) => {
       console.error("Error retrieving todos:", error);
     }
   };
-  const getNoteColor = (index) => {
-    if (noteColors[index]) {
-      return noteColors[index];
-    } else {
-      const randomColor = colors[Math.floor(Math.random() * colors.length)];
-      setNoteColors((prevColors) => ({ ...prevColors, [index]: randomColor }));
-      return randomColor;
-    }
-  };
   useEffect(() => {
     const unsubscribeFocus = navigation.addListener('focus', () => {
       setCheckedItems({});
@@ -87,25 +78,39 @@ const TodoHome = ({ navigation }) => {
     const key = `${category}_${index}`;
     setCheckedItems((prev) => ({ ...prev, [key]: !prev[key] }));
   };
+
   const handleDelete = async (index, category) => {
     try {
-      const key = `${category}_${index}`;
-      setCheckedItems((prev) => {
-        const { [key]: removedKey, ...rest } = prev;
-        return rest;
-      });
-
-      const filteredTodos = alltodos.filter((todo) => todo.category === category);
+      // Filter todos based on the category
+      const filteredTodos = alltodos.filter(todo => todo.category === category);
+  
+      // Create a copy of the filtered todos array
       const updatedTodos = [...filteredTodos];
+  
+      // Remove the todo at the specified index
       updatedTodos.splice(index, 1);
-      const newAllTodos = alltodos.filter((todo) => todo.category !== category);
+  
+      // Create a copy of alltodos and remove the existing category
+      const newAllTodos = alltodos.filter(todo => todo.category !== category);
+  
+      // Concatenate the new todos and the updated todos
       const finalTodos = newAllTodos.concat(updatedTodos);
+  
+      // Update state with the new todos
       setAllTodos(finalTodos);
-      await AsyncStorage.setItem("todo", JSON.stringify({ data: finalTodos }));
+  
+      // Save the updated todos to storage
+      await AsyncStorage.setItem('todo', JSON.stringify({ data: finalTodos }));
+  
+      // Update filteredTodos state to re-render the FlatList
+      setFilteredTodos(finalTodos);
     } catch (error) {
-      console.error("Error deleting todo:", error);
+      console.error('Error deleting todo:', error);
     }
   };
+  
+
+
 
 
   useEffect(() => {
@@ -137,7 +142,6 @@ const TodoHome = ({ navigation }) => {
 
 
   const renderItem = ({ item, index }) => {
-    const noteColor = getNoteColor(index);
     const isChecked = checkedItems[`${item.category}_${index}`] || false;
 
 
@@ -164,11 +168,21 @@ const TodoHome = ({ navigation }) => {
             </View>
 
           </View>
-          
+
+          <Pressable
+            style={{ flex: 1, justifyContent: 'center', alignItems: 'flex-end' }}
+            onPress={() => handleDelete(index, item.category)}
+          >
+            <Image style={styles.delete} source={require('../../Images/bin.png')} />
+          </Pressable>
+
+
+
         </View>
       </TouchableOpacity>
     );
   };
+
 
   return (
     <View style={styles.background}>
@@ -225,7 +239,7 @@ const styles = StyleSheet.create({
     gap: 20
   },
   delete: {
-    position: 'absolute',
+
     width: 25,
     height: 30,
   },
