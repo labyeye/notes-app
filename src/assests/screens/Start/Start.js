@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     width: "90%",
     height: "6%",
     marginTop: 50,
-    backgroundColor: 'white'
+    backgroundColor: '#8ecae6'
   },
   title: {
     color: 'white',
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
   container: {
     height: windowHeight,
     width: windowWidth,
-    backgroundColor: 'black',
+    backgroundColor: '#023047',
     justifyContent: 'center',
     alignItems: 'center'
   }

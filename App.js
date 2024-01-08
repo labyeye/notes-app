@@ -8,8 +8,12 @@ import TodoHome from "./src/assests/screens/TodoHome";
 import { Image, StyleSheet } from "react-native";
 import StatTodo from "./src/assests/screens/TodoStat/StatTodo";
 import DoneTodo from "./src/assests/screens/DoneTodo/DoneTodo";
+import AddNotes from "./src/assests/screens/AddNotes/AddNotes";
+
 import { AuthProvider } from "./AuthContext";
 import { navigationRef } from "./navigationRef";
+import EditNotesScreen from "./src/assests/screens/EditNotes/EditNotes";
+import AddTodo from "./src/assests/screens/AddTodo/AddTodo";
 
 const Stack = createNativeStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
@@ -69,7 +73,11 @@ const App = () => {
             options={{ headerShown: false }}
           />
           <Stack.Screen name="StatTodo" component={StatTodo} />
+          <Stack.Screen name="AddNotes" component={AddNotes} />
           <Stack.Screen name="DoneTodo" component={DoneTodo} />
+          <Stack.Screen name="AddTodo" component={AddTodo} />
+
+          <Stack.Screen name="EditNotesScreen" component={EditNotesScreen} />
         </Stack.Navigator>
       </AuthProvider>
     </NavigationContainer>

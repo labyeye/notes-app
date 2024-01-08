@@ -17,8 +17,8 @@ import { useIsFocused } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../../../AuthContext";
 const colors = ["#ADE8F4", "#90E0EF", "#48CAE4", "#0096C7", "#0077B6", "#CAF0F8"];
-const windowWidth = Dimensions.get("window").width;
-const windowHeight = Dimensions.get("window").height;
+const windowWidth = Dimensions.get("screen").width;
+const windowHeight = Dimensions.get("screen").height;
 type Note = {
   title: string;
   desc: string;
@@ -131,7 +131,7 @@ const HomeScreen = ({ navigation }) => {
 
     return (
       <TouchableOpacity onPress={() => navigateToEditScreen(index)}>
-        <View style={[styles.notetab, { backgroundColor: noteColor }]}>
+        <View style={styles.notetab}>
           <View style={{ width: "80%", height: "50%" }}>
             <Text style={styles.title}>{item.title}</Text>
             <Text style={styles.desc}>{item.desc}</Text>
@@ -175,7 +175,7 @@ const HomeScreen = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   delete: {
-    position: "absolute",
+    
     width: 40,
     height: 40,
   },
@@ -218,9 +218,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   background: {
-    height: windowHeight,
-    width: windowWidth,
-    backgroundColor: "black",
+    flex:1,
+    backgroundColor: "#023047",
     flexDirection: "column",
     alignItems: "center",
   },
@@ -228,14 +227,14 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginTop: 10,
     flexDirection: "row",
-    height: 100,
-    backgroundColor: "#fcaf08",
+    height: "110%",
+    backgroundColor: "#219ebc",
     width: "100%",
     gap: 20,
   },
   noteback: {
-    height: windowHeight,
-    width: windowWidth,
+    flex:1,
+    alignItems:'center'
   },
 });
 

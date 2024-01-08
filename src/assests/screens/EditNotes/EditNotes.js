@@ -10,7 +10,6 @@ const EditNotesScreen = ({ route, navigation }) => {
     const [title, setTitle] = useState(noteToEdit.title);
     const [desc, setDesc] = useState(noteToEdit.desc);
     const [allnotes, setAllnotes] = useState([]); // Initialize an empty state for the notes
-
     useEffect(() => {
         // Fetch the notes from the local storage when the component mounts
         const fetchNotes = async () => {

@@ -164,10 +164,7 @@ const TodoHome = ({ navigation }) => {
             </View>
 
           </View>
-          <Pressable style={{ height: "100%", justifyContent: 'center' }} onPress={() => handleDelete(index, item.category)}>
-            <Image style={styles.delete} source={require('../../Images/bin.png')} />
-          </Pressable>
-
+          
         </View>
       </TouchableOpacity>
     );
