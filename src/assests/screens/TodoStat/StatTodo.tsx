@@ -1,45 +1,41 @@
 import React, { useState, useEffect, useCallback } from "react";
-import {FlatList, Image, Pressable, StyleSheet, Text, View } from "react-native";
+import { FlatList, Image, Pressable, StyleSheet, Text, View } from "react-native";
 import PieChart from "react-native-pie-chart";
 import EncryptedStorage from "react-native-encrypted-storage";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const StatTodo = ({ navigation, route }) => {
- const [regularCheckboxCount, setRegularCheckboxCount] = useState<Record<string, number>>({});
- const [series, setSeries] = useState<number[]>([]);
- const [alltodos, setAllTodos] = useState([]);
- const sliceColor = ["#3498db", // Blue
-    "#2ecc71", // Green
-    "#e74c3c", // Red
-    "#f39c12", // Orange
-    "#9b59b6", // Purple
-    "#1abc9c", // Turquoise
-    "#3498db", // Light Blue
-    "#2c3e50", // Midnight Blue
-    "#d35400", // Pumpkin
-    "#e74c3c", // Bright Red
-    "#16a085", // Green Sea
-    "#8e44ad", // Wisteria
-    "#f1c40f", // Sunflower
-    "#2980b9", // Belize Hole
-    "#27ae60"];
+  const [regularCheckboxCount, setRegularCheckboxCount] = useState<Record<string, number>>({});
+  const [series, setSeries] = useState<number[]>([]);
 
- const fetchData = async () => {
+  const [alltodos, setAllTodos] = useState([]);
+  const sliceColor = [
+    "#FF0000", "#FF4500", "#FFA500", "#FFFF00", "#ADFF2F",
+    "#32CD32", "#008000", "#006400", "#00FFFF", "#00BFFF",
+    "#0000FF", "#8A2BE2", "#4B0082", "#800080", "#FF00FF",
+    "#FF1493", "#FF69B4", "#FFC0CB", "#FFD700", "#FFFFE0",
+    "#EEE8AA", "#F0E68C", "#DAA520", "#B8860B"
+  ];
+  
+  const fetchData = async () => {
     try {
-
-      let storedTodos  = await AsyncStorage.getItem('todo');
-      if(storedTodos == null )
-      return 
+      let storedTodos = await AsyncStorage.getItem('todo');
+      if (storedTodos == null)
+        return
       let data = JSON.parse(storedTodos);
       // Retrieve regularCheckboxCount from local storage
       let storedCounts = await AsyncStorage.getItem('checkbox');
-      console.log(["Stored Counts:",storedCounts]);
+      console.log(["Stored Counts:", storedCounts]);
+
       if (storedCounts) {
-        
         let counts = JSON.parse(storedCounts);
         console.log(counts);
         setRegularCheckboxCount(counts || {});
         setSeries(Object.values(counts || {}));
+      } else {
+        // Set default value if 'checkbox' item is not found
+        setRegularCheckboxCount({});
+        setSeries([]);
       }
       if (data && data.data) {
         setAllTodos(data.data);
@@ -47,34 +43,40 @@ const StatTodo = ({ navigation, route }) => {
     } catch (error) {
       console.error("Error retrieving data:", error);
     }
- };
+  };
 
- useEffect(() => {
+  useEffect(() => {
     const unsubscribeFocus = navigation.addListener('focus', () => {
       fetchData();
     });
 
     return unsubscribeFocus;
- }, [navigation, route?.params?.updatedTodo]);
+  }, [navigation, route?.params?.updatedTodo]);
 
- useEffect(() => {
+  useEffect(() => {
     console.log("Regular Checkbox Count:", regularCheckboxCount);
 
- }, [regularCheckboxCount, alltodos]);
+  }, [regularCheckboxCount, alltodos]);
 
- const renderItem = ({ item, index }) => (
+  const renderItem = ({ item, index }) => (
     <View style={styles.listItem}>
-      <Text style={styles.listItemText}>{item.title}: {regularCheckboxCount[index] || 0} clicks</Text>
+      <Text style={styles.listItemText}>{item.title}: {regularCheckboxCount[index] || 0} Times Done</Text>
     </View>
- );
+  );
 
- return (
+  return (
     <View style={styles.container}>
       <View style={styles.search}>
+        <View style={{width:"15%"}}>
         <Pressable onPress={() => navigation.navigate("Main", { screen: "TodoHome" })}>
           <Image style={styles.searchimg} source={require("../../Images/back.png")} />
         </Pressable>
+        </View>
+        <View style={{width:"100%",marginLeft:70}}>
+        <Text style={{ color: 'white', fontSize: 20 ,alignSelf:'center'}}>Statistics Screen</Text>
       </View>
+      </View>
+      
       <View style={styles.pie}>
         {series.length > 0 ? (
           <PieChart series={series} sliceColor={sliceColor.slice(0, series.length)} widthAndHeight={300} />
@@ -90,30 +92,31 @@ const StatTodo = ({ navigation, route }) => {
         />
       </View>
     </View>
- );
+  );
 };
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'column',
     width: "100%",
     height: "100%",
-    alignItems: 'center',
+    
     backgroundColor: 'black',
   },
   search: {
-    width: "100%",
-    height: "5%",
+    width: "50%",
+    height: "4%",
+    flexDirection: 'row',
+    marginTop: 80,
   },
   searchimg: {
-    width: "10%",
-    height: "22%",
-    marginTop: 80,
-    marginLeft: 10,
+    width: "100%",
+    height: "100%",
+    marginLeft: 20,
   },
   pie: {
     width: "100%",
     alignItems: 'center',
-    marginTop: 110,
+    marginTop: 60,
 
   },
   flatListContainer: {

@@ -10,19 +10,29 @@ import {
   FlatList,
   TouchableOpacity,
 } from "react-native";
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+
 import EncryptedStorage from "react-native-encrypted-storage";
 import { useIsFocused } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../../../AuthContext";
-const colors = ["#ADE8F4", "#90E0EF", "#48CAE4","#0096C7","#0077B6","#CAF0F8"];
+const colors = ["#ADE8F4", "#90E0EF", "#48CAE4", "#0096C7", "#0077B6", "#CAF0F8"];
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
-
+type Note = {
+  title: string;
+  desc: string;
+  
+};
+interface NoteColors {
+  [index: number]: string;
+}
 const HomeScreen = ({ navigation }) => {
+  
   const { userToken, signOut } = useAuth();
-  const [noteColors, setNoteColors] = useState({});
+  const [noteColors, setNoteColors] = useState<NoteColors>({});
   const isFocused = useIsFocused();
-  const [allnotes, setAll] = useState([]);
+  const [allnotes, setAll] = useState<Note[]>([]);
   const [allColors, setAllColors] = useState({});
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -30,41 +40,42 @@ const HomeScreen = ({ navigation }) => {
     getAllNotes();
   }, [isFocused]);
 
-  
 
-  const getNoteColor = (index) => {
+
+  const getNoteColor = (index:number) => {
     if (noteColors[index]) {
-       return noteColors[index];
+      return noteColors[index];
     } else {
-       const randomColor = colors[Math.floor(Math.random() * colors.length)];
-       setNoteColors((prevColors) => ({ ...prevColors, [index]: randomColor }));
-       return randomColor;
+      const randomColor = colors[Math.floor(Math.random() * colors.length)];
+      setNoteColors((prevColors) => ({ ...prevColors, [index]: randomColor }));
+      return randomColor;
     }
-   };
-
-  const saveNote = async (newNote) => {
-    let temp = allnotes.slice();
-    let tempColors = { ...allColors };
-
-    const noteIndex = temp.length;
-    const noteColor = tempColors[noteIndex] || getRandomColor();
-
-    temp.push(newNote);
-    tempColors[noteIndex] = noteColor;
-
-    await EncryptedStorage.setItem("notes", JSON.stringify({ data: temp }));
-    await EncryptedStorage.setItem("noteColors", JSON.stringify(tempColors));
-
-    getAllNotes();
   };
 
-  const deleteNote = async (index) => {
+  const saveNote = async (newNote: Note) => {
+    let temp = allnotes.slice();
+    let tempColors: { [key: number]: string } = { ...allColors };
+  
+    const noteIndex = temp.length;
+    const noteColor = tempColors[noteIndex];
+  
+    temp.push(newNote);
+    tempColors[noteIndex] = noteColor;
+  
+    await EncryptedStorage.setItem("notes", JSON.stringify({ data: temp }));
+    await EncryptedStorage.setItem("noteColors", JSON.stringify(tempColors));
+  
+    getAllNotes();
+  };
+  
+
+  const deleteNote = async (index:number) => {
     let newColors = { ...noteColors };
+    let tempColors: { [key: number]: string } = { ...allColors };
+
     delete newColors[index];
     setNoteColors(newColors);
     let temp = allnotes.slice();
-    let tempColors = { ...allColors };
-
     temp.splice(index, 1);
     delete tempColors[index];
 
@@ -74,7 +85,7 @@ const HomeScreen = ({ navigation }) => {
     getAllNotes();
   };
 
-  const navigateToEditScreen = (index) => {
+  const navigateToEditScreen = (index:number) => {
     const noteToEdit = allnotes[index];
     navigation.navigate("EditNotesScreen", {
       noteToEdit,
@@ -85,24 +96,37 @@ const HomeScreen = ({ navigation }) => {
   };
 
   const getAllNotes = async () => {
-    let x = [];
-    let y = await EncryptedStorage.getItem("notes");
-    let data = JSON.parse(y);
-    if (data && data.data) {
-      x = data.data;
-    }
-    setAll(x);
+    try {
+      let x = [];
+      let y = await EncryptedStorage.getItem("notes");
 
-    let colorData = await EncryptedStorage.getItem("noteColors");
-    let colors = JSON.parse(colorData);
-    setAllColors(colors || {});
+      if (y !== null) {
+        let data = JSON.parse(y);
+        if (data && data.data) {
+          x = data.data;
+        }
+      }
+
+      setAll(x);
+
+      let colorData: string | null = await EncryptedStorage.getItem("noteColors");
+      let colors: { [key: string]: string } = {};
+
+      if (colorData) {
+        colors = JSON.parse(colorData);
+      }
+      setAllColors(colors || {});
+    } catch (error) {
+      console.error("Error parsing JSON:", error);
+    }
   };
+
 
   const filteredNotes = allnotes.filter((item) =>
     item.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const renderItem = ({ item, index }) => {
+  const renderItem = ({ item, index }: { item: Note; index: number }) => {
     const noteColor = getNoteColor(index);
 
     return (
@@ -125,6 +149,7 @@ const HomeScreen = ({ navigation }) => {
 
   return (
     <View style={styles.background}>
+      
       <View style={styles.searchtab}>
         <TextInput
           style={styles.input}
@@ -143,6 +168,7 @@ const HomeScreen = ({ navigation }) => {
           keyExtractor={(item, index) => index.toString()}
         />
       </View>
+
     </View>
   );
 };
@@ -166,7 +192,7 @@ const styles = StyleSheet.create({
   plusimg: {
     width: 20,
     height: 20,
-    marginLeft: 10,
+
   },
   searchimg: {
     width: 20,
@@ -176,18 +202,19 @@ const styles = StyleSheet.create({
   input: {
     width: "85%",
     height: "60%",
-    borderColor: "gray",
-    borderWidth: 3,
-    borderRadius: 20,
+    borderColor: "white",
+    borderWidth: 1.5,
+    borderRadius: 10,
     marginLeft: 10,
     color: "white",
   },
   searchtab: {
-    width: "100%",
-    height: "10%",
-    marginTop: 60,
-    gap: 10,
+    width: wp('100%'),
+    height: hp('10%'),
+    marginTop: hp('5%'),
     flexDirection: "row",
+    justifyContent: "space-between",
+    paddingHorizontal: wp('5%'), // Adjust the paddingHorizontal value as needed
     alignItems: "center",
   },
   background: {

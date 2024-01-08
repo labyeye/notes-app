@@ -7,7 +7,7 @@ import Start from "./src/assests/screens/Start";
 import EditNotesScreen from "./src/assests/screens/EditNotes/EditNotes";
 import TodoHome from "./src/assests/screens/TodoHome";
 import AddNotes from "./src/assests/screens/AddNotes/AddNotes";
-import { Image, View } from "react-native";
+import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import AddTodo from "./src/assests/screens/AddTodo/AddTodo";
 import EditTodo from "./src/assests/screens/EditTodo";
 import StatTodo from "./src/assests/screens/TodoStat/StatTodo";
@@ -21,15 +21,17 @@ const Tab = createBottomTabNavigator();
 const TabNavigator = () => (
   <Tab.Navigator screenOptions={{
     tabBarStyle: {backgroundColor:'black'}}}>
-    <Tab.Screen name="Home" component={HomeScreen} options={{
-      headerShown: false,
-      tabBarIcon: ({ focused }) => {
-        return (
-          <Image source={require('./src/assests/Images/noty.png')} 
-          style={{ tintColor: focused ? 'white' : 'white' }}/>
-        );
-      }
-    }} />
+    <Tab.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({ focused }) => (
+            <Image source={require('./src/assests/Images/noty.png')} style={{ tintColor: focused ? 'white' : 'white' }} />
+          ),
+        }}
+      />
+    
     <Tab.Screen name="Todo" component={TodoHome} options={{
       headerShown: false,
       tabBarIcon: ({ focused }) => {
@@ -41,6 +43,8 @@ const TabNavigator = () => (
     }}
     />
   </Tab.Navigator>
+
+
 );
 
 const App = () => {
@@ -73,7 +77,6 @@ const App = () => {
   
           <Stack.Screen name="EditNotesScreen" component={EditNotesScreen} />
           <Stack.Screen name="EditTodo" component={EditTodo} />
-          <Stack.Screen name="AddNotes" component={AddNotes} />
           <Stack.Screen name="AddTodo" component={AddTodo} />  
           <Stack.Screen name="StatTodo" component={StatTodo} /> 
           <Stack.Screen name="DoneTodo" component={DoneTodo} />  
@@ -82,5 +85,11 @@ const App = () => {
     </NavigationContainer>
   );
 };
+
+const styles=StyleSheet.create({
+  shadow:{
+
+  }
+});
 
 export default App;
