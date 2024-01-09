@@ -176,9 +176,7 @@ const TodoHome = ({ navigation }) => {
           value={searchQuery}
           onChangeText={(text) => handleSearch(text)}
         />
-        <Pressable onPress={() => navigation.navigate("AddTodo")}>
-          <Image style={styles.plusimg} source={require('../../Images/plus.png')} />
-        </Pressable>
+        
       </View>
       <View style={{width:"100%",flexDirection:'row',alignItems:'flex-start',marginLeft:30,marginTop:20}}>
         <Text style={{ color: 'white', fontSize: 20, marginBottom: 10 }}>Regular Todos</Text>
@@ -251,7 +249,7 @@ const styles = StyleSheet.create({
 
   },
   input: {
-    width: "65%",
+    width: "85%",
     height: "60%",
     borderColor: 'white',
     borderWidth: 3,
