@@ -7,9 +7,8 @@ import {
    StyleSheet,
    TextInput,
    View,
-   Text,
 } from "react-native";
-import EncryptedStorage from "react-native-encrypted-storage";
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Picker from "react-native-picker-select";
 
 const windowWidth = Dimensions.get("window").width;
@@ -71,10 +70,8 @@ const AddTodo = ({ navigation }) => {
             </View>
          </View>
          <View style={styles.back}>
-                <TextInput placeholder="Type your Todo"  style={[styles.addtitle,{fontSize: 25 }]} placeholderTextColor="white"value={title} onChangeText={(txt) => setitle(txt)} />
-                      
-            </View>
-         {/* Add the rest of your components here */}
+            <TextInput placeholder="Type your Todo"  style={[styles.addtitle,{fontSize: 25 }]} placeholderTextColor="white"value={title} onChangeText={(txt) => setitle(txt)} />
+         </View>
       </View>
    );
 };
@@ -90,20 +87,13 @@ const styles = StyleSheet.create({
       padding:10,
       height: "30%",
       color:'white',
-      backgroundColor: 'black'
+      backgroundColor: "#023047",
   },
-  adddesc: {
-      width: windowWidth,
-      fontSize:20,
-      padding:10,
-      color:'white',
-      height: windowHeight,
-      backgroundColor: 'black'
-  },
+  
    container: {
       height: windowHeight,
       width: windowWidth,
-      backgroundColor: "black",
+      backgroundColor: "#023047",
       flexDirection: "column",
       alignItems: "center",
    },
@@ -128,14 +118,13 @@ const styles = StyleSheet.create({
       marginLeft: 30,
    },
    searchtab: {
-      width: "100%",
-      height: "10%",
-      marginTop: 60,
+      width: wp('100%'),
+      height: hp('10%'),
+      marginTop: hp('5%'),
       flexDirection: "row",
-      alignItems: "center",
       justifyContent: "space-between",
-      paddingHorizontal: 10,
-   },
+      alignItems: "center",
+    },
    categoryTab: {
       flexDirection: "row",
       marginLeft: "auto",

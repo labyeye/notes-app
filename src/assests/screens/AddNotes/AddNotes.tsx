@@ -2,6 +2,7 @@ import * as React from "react";
 import { StyleSheet, View, Text, Pressable, Image, Dimensions, TextInput, TouchableOpacity } from "react-native";
 import { useState } from "react";
 import EncryptedStorage from "react-native-encrypted-storage";
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -59,7 +60,7 @@ const styles = StyleSheet.create({
         padding:10,
         height: "10%",
         color:'white',
-        backgroundColor: 'black'
+        backgroundColor: "#023047",
     },
     adddesc: {
         width: windowWidth,
@@ -67,7 +68,7 @@ const styles = StyleSheet.create({
         padding:10,
         color:'white',
         height: windowHeight,
-        backgroundColor: 'black'
+        backgroundColor: "#023047",
     },
     searchimg: {
         width: 30,
@@ -80,17 +81,16 @@ const styles = StyleSheet.create({
         marginRight: 30,
     },
     searchtab: {
-        width: "100%",
-        height: "10%",
-        marginTop: 60,
-        gap: 10,
-        justifyContent:'space-between',
+        width: wp('100%'),
+        height: hp('10%'),
+        marginTop: hp('5%'),
         flexDirection: "row",
-        alignItems: "center"
-    },
+        justifyContent: "space-between",
+        alignItems: "center",
+      },
     background: {
         height: windowHeight,
-        backgroundColor: 'black',
+        backgroundColor: "#023047",
         flexDirection: 'column',
         alignItems: 'center',
     },

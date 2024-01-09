@@ -99,8 +99,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     width: "100%",
     height: "100%",
-    
-    backgroundColor: 'black',
+    backgroundColor: "#023047",
   },
   search: {
     width: "50%",

@@ -130,14 +130,14 @@ const HomeScreen = ({ navigation }) => {
     const noteColor = getNoteColor(index);
 
     return (
-      <TouchableOpacity onPress={() => navigateToEditScreen(index)}>
+      <TouchableOpacity onPress={() => navigateToEditScreen(index)} style={{alignItems:'center'}}>
         <View style={styles.notetab}>
-          <View style={{ width: "80%", height: "50%" }}>
+          <View style={{ width: "80%", height: "100%"}}>
             <Text style={styles.title}>{item.title}</Text>
             <Text style={styles.desc}>{item.desc}</Text>
           </View>
           <TouchableOpacity
-            style={{ height: "100%", justifyContent: "center" }}
+            style={{ height: "100%",width:'15%', justifyContent: "center",}}
             onPress={() => deleteNote(index)}
           >
             <Image style={styles.delete} source={require("../../Images/bin.png")} />
@@ -157,9 +157,7 @@ const HomeScreen = ({ navigation }) => {
           value={searchQuery}
           onChangeText={(text) => setSearchQuery(text)}
         />
-        <Pressable onPress={() => navigation.navigate("AddNotes")}>
-          <Image style={styles.plusimg} source={require("../../Images/plus.png")} />
-        </Pressable>
+        
       </View>
       <View style={styles.noteback}>
         <FlatList
@@ -175,9 +173,9 @@ const HomeScreen = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   delete: {
-    
-    width: 40,
-    height: 40,
+    position:'absolute',
+    width: 35,
+    height: 35,
   },
   title: {
     marginLeft: 10,
@@ -192,7 +190,6 @@ const styles = StyleSheet.create({
   plusimg: {
     width: 20,
     height: 20,
-
   },
   searchimg: {
     width: 20,
@@ -200,12 +197,11 @@ const styles = StyleSheet.create({
     marginLeft: 30,
   },
   input: {
-    width: "85%",
+    width: "100%",
     height: "60%",
     borderColor: "white",
     borderWidth: 1.5,
-    borderRadius: 10,
-    marginLeft: 10,
+    borderRadius: 20,
     color: "white",
   },
   searchtab: {
@@ -227,14 +223,17 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginTop: 10,
     flexDirection: "row",
-    height: "110%",
+    height: 100, // Set a fixed height for each note
     backgroundColor: "#219ebc",
-    width: "100%",
-    gap: 20,
+    width: "95%",
+    paddingHorizontal: 10, // Add some padding for better separation
+    justifyContent: 'space-between', // Align items vertically
   },
+  
   noteback: {
     flex:1,
-    alignItems:'center'
+    alignItems:'center',
+    justifyContent:'center'
   },
 });
 

@@ -14,6 +14,7 @@ import { AuthProvider } from "./AuthContext";
 import { navigationRef } from "./navigationRef";
 import EditNotesScreen from "./src/assests/screens/EditNotes/EditNotes";
 import AddTodo from "./src/assests/screens/AddTodo/AddTodo";
+import Add from "./src/assests/screens/AddScreen/Add";
 
 const Stack = createNativeStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
@@ -21,8 +22,8 @@ const Tab = createMaterialBottomTabNavigator();
 const TabNavigator = () => (
   <Tab.Navigator
     activeColor="white"
-    inactiveColor="gray"
-    barStyle={{ backgroundColor: 'black' }}
+    inactiveColor="white"
+    barStyle={{ backgroundColor: '#023047' }}
     shifting={true}
   >
     <Tab.Screen
@@ -30,7 +31,16 @@ const TabNavigator = () => (
       component={HomeScreen}
       options={{
         tabBarIcon: ({ focused }) => (
-          <Image source={require('./src/assests/Images/noty.png')} style={{ tintColor: focused ? 'white' : 'gray' }} />
+          <Image source={require('./src/assests/Images/noty.png')} style={{ tintColor: focused ? 'black' : 'white' }} />
+        ),
+      }}
+    />
+     <Tab.Screen
+      name="Add"
+      component={Add}
+      options={{
+        tabBarIcon: ({ focused }) => (
+          <Image source={require('./src/assests/Images/plus.png')} style={{ tintColor: focused ? 'black' : 'white' ,width:"50%",justifyContent:'center'}} />
         ),
       }}
     />
@@ -39,7 +49,7 @@ const TabNavigator = () => (
       component={TodoHome}
       options={{
         tabBarIcon: ({ focused }) => (
-          <Image source={require('./src/assests/Images/done.png')} style={{ tintColor: focused ? 'white' : 'gray' }} />
+          <Image source={require('./src/assests/Images/done.png')} style={{ tintColor: focused ? 'black' : 'white' }} />
         ),
       }}
     />
@@ -73,9 +83,9 @@ const App = () => {
             options={{ headerShown: false }}
           />
           <Stack.Screen name="StatTodo" component={StatTodo} />
-          <Stack.Screen name="AddNotes" component={AddNotes} />
           <Stack.Screen name="DoneTodo" component={DoneTodo} />
           <Stack.Screen name="AddTodo" component={AddTodo} />
+          <Stack.Screen name="AddNotes" component={AddNotes} />
 
           <Stack.Screen name="EditNotesScreen" component={EditNotesScreen} />
         </Stack.Navigator>

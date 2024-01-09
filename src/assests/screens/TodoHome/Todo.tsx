@@ -81,34 +81,19 @@ const TodoHome = ({ navigation }) => {
 
   const handleDelete = async (index, category) => {
     try {
-      // Filter todos based on the category
       const filteredTodos = alltodos.filter(todo => todo.category === category);
-  
-      // Create a copy of the filtered todos array
       const updatedTodos = [...filteredTodos];
-  
-      // Remove the todo at the specified index
       updatedTodos.splice(index, 1);
-  
-      // Create a copy of alltodos and remove the existing category
       const newAllTodos = alltodos.filter(todo => todo.category !== category);
-  
-      // Concatenate the new todos and the updated todos
       const finalTodos = newAllTodos.concat(updatedTodos);
-  
-      // Update state with the new todos
       setAllTodos(finalTodos);
-  
-      // Save the updated todos to storage
       await AsyncStorage.setItem('todo', JSON.stringify({ data: finalTodos }));
-  
-      // Update filteredTodos state to re-render the FlatList
       setFilteredTodos(finalTodos);
     } catch (error) {
       console.error('Error deleting todo:', error);
     }
   };
-  
+
 
 
 
@@ -143,16 +128,17 @@ const TodoHome = ({ navigation }) => {
 
   const renderItem = ({ item, index }) => {
     const isChecked = checkedItems[`${item.category}_${index}`] || false;
+    const backgroundColor = item.category === "Regular" ? "#fb8500" : "#ffb703";
 
 
     return (
       <TouchableOpacity>
-        <View style={styles.notetab}>
-          <View style={{ width: "80%", height: "100%", flexDirection: "row", alignSelf: 'center' }}>
+        <View style={[styles.notetab, { backgroundColor }]}>
+          <View style={{ width: "90%", height: "100%", flexDirection: "row", alignSelf: 'center' }}>
             <View style={{ justifyContent: "center", height: "100%", alignItems: "center", width: '25%', alignSelf: 'flex-start' }}>
               <BouncyCheckbox
                 size={25}
-                fillColor="red"
+                fillColor="black"
                 unfillColor="#FFFFFF"
                 iconStyle={{ borderColor: "black" }}
                 innerIconStyle={{ borderWidth: 2 }}
@@ -163,21 +149,15 @@ const TodoHome = ({ navigation }) => {
                 isChecked={checkedItems[`${item.category}_${index}`]}
               />
             </View>
-            <View style={{ justifyContent: 'center', width: "60%", height: '60%', alignSelf: 'center' }}>
+            <View style={{ justifyContent: 'center',width: "60%", height: '60%', alignSelf: 'center' }}>
               <Text style={styles.title}>{item.title}</Text>
             </View>
-
           </View>
-
           <Pressable
-            style={{ flex: 1, justifyContent: 'center', alignItems: 'flex-end' }}
-            onPress={() => handleDelete(index, item.category)}
-          >
+            style={{  justifyContent: 'center', borderWidth:1,alignItems: 'flex-end' }}
+            onPress={() => handleDelete(index, item.category)}>
             <Image style={styles.delete} source={require('../../Images/bin.png')} />
           </Pressable>
-
-
-
         </View>
       </TouchableOpacity>
     );
@@ -200,7 +180,9 @@ const TodoHome = ({ navigation }) => {
           <Image style={styles.plusimg} source={require('../../Images/plus.png')} />
         </Pressable>
       </View>
-      <Text style={{ color: 'white', fontSize: 20, marginBottom: 10 }}>Regular Todos</Text>
+      <View style={{width:"100%",flexDirection:'row',alignItems:'flex-start',marginLeft:30,marginTop:20}}>
+        <Text style={{ color: 'white', fontSize: 20, marginBottom: 10 }}>Regular Todos</Text>
+      </View>
       <View style={styles.noteback}>
         <FlatList
           data={filteredTodos.filter(todo => todo.category === "Regular")}
@@ -208,7 +190,9 @@ const TodoHome = ({ navigation }) => {
           keyExtractor={(item, index) => `Regular_${index}`}
         />
       </View>
-      <Text style={{ color: 'white', fontSize: 20, marginTop: 15 }}>Occasional Todos</Text>
+      <View style={{width:"100%",flexDirection:'row',alignItems:'flex-start',marginLeft:30,marginTop:10}}>
+        <Text style={{ color: 'white', fontSize: 20, marginBottom: 10 }}>Occasional Todos</Text>
+      </View>
       <View style={styles.noteback}>
         <FlatList
           data={filteredTodos.filter(todo => todo.category === "Occasional")}
@@ -225,7 +209,7 @@ const styles = StyleSheet.create({
   background: {
     height: "100%",
     width: "100%",
-    backgroundColor: 'black',
+    backgroundColor: '#023047',
     flexDirection: 'column',
     alignItems: 'center',
   },
@@ -233,13 +217,14 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginTop: 10,
     flexDirection: 'row',
+    alignItems: 'center',
     height: 80,
     backgroundColor: '#32CD32',
     width: "100%",
     gap: 20
   },
   delete: {
-
+    position: 'absolute',
     width: 25,
     height: 30,
   },
@@ -268,7 +253,7 @@ const styles = StyleSheet.create({
   input: {
     width: "65%",
     height: "60%",
-    borderColor: 'gray',
+    borderColor: 'white',
     borderWidth: 3,
     borderRadius: 20,
     marginLeft: 5,
@@ -296,9 +281,10 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   noteback: {
-    height: "30%",
-    width: windowWidth,
-    marginTop: 10
+    height: "40%",
+    width: "95%",
+    marginTop: 10,
+    alignItems: 'center'
   }
 });
 

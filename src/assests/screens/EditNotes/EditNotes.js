@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
     background: {
         height: windowHeight,
         width: windowWidth,
-        backgroundColor: 'black',
+        backgroundColor: "#023047",
         flexDirection: 'column',
         alignItems: 'center',
     },
