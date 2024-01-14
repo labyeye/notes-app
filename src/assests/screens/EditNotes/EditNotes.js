@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
         padding:10,
         height: "10%",
         color:'white',
-        backgroundColor: 'black'
+        backgroundColor: '#023047'
     },
     adddesc: {
         width: windowWidth,
@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
         padding:10,
         color:'white',
         height: windowHeight,
-        backgroundColor: 'black'
+        backgroundColor: '#023047'
     },
     delete: {
         marginVertical: -50,
@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         marginTop: 10,
         height: 100,
-        backgroundColor: '#fcaf08',
+        backgroundColor: '#023047',
         width: "100%",
     },
     noteback: {

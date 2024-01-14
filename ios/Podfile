@@ -26,6 +26,7 @@ if linkage != nil
 end
 
 target 'NotesApp' do
+  pod 'Google-Mobile-Ads-SDK'
   config = use_native_modules!
 
   # Flags change depending on the env values.

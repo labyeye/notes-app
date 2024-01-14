@@ -1,29 +1,30 @@
 import * as React from "react";
 import { StyleSheet, View, Text, Pressable, Image, Dimensions, TextInput, TouchableOpacity } from "react-native";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import EncryptedStorage from "react-native-encrypted-storage";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
+
 
 const AddNotes = ({ navigation }) => {
     const [title, setitle] = useState("");
     const [desc, setdesc] = useState("");
+    
     const savenote = async () => {
         try {
+            
             // Retrieve existing notes
             let existingNotes = await EncryptedStorage.getItem('notes');
             existingNotes = existingNotes ? JSON.parse(existingNotes).data : [];
-    
             // Add the new note
             const newNote = { title, desc };
             existingNotes.push(newNote);
-    
             // Save the updated notes
             await EncryptedStorage.setItem('notes', JSON.stringify({ data: existingNotes }));
-    
-            // Navigate back
+            // Show the interstitial ad if loaded
+           
+
             navigation.goBack();
         } catch (error) {
             console.error('Error saving note:', error);
@@ -40,10 +41,10 @@ const AddNotes = ({ navigation }) => {
                 </Pressable>
             </View>
             <View style={styles.back}>
-                <TextInput placeholder="Title"  style={[styles.addtitle,{fontSize: 39 }]} placeholderTextColor="white"value={title} onChangeText={(txt) => setitle(txt)} />
-                
-                <TextInput placeholder="Type Something" placeholderTextColor="white"style={styles.adddesc} value={desc} onChangeText={(txt) => setdesc(txt)} multiline/>
-                
+                <TextInput placeholder="Title" style={[styles.addtitle, { fontSize: 39 }]} placeholderTextColor="white" value={title} onChangeText={(txt) => setitle(txt)} />
+
+                <TextInput placeholder="Type Something" placeholderTextColor="white" style={styles.adddesc} value={desc} onChangeText={(txt) => setdesc(txt)} multiline />
+
             </View>
         </View>
     );
@@ -56,17 +57,17 @@ const styles = StyleSheet.create({
     },
     addtitle: {
         width: windowWidth,
-        fontSize:30,
-        padding:10,
+        fontSize: 30,
+        padding: 10,
         height: "10%",
-        color:'white',
+        color: 'white',
         backgroundColor: "#023047",
     },
     adddesc: {
         width: windowWidth,
-        fontSize:20,
-        padding:10,
-        color:'white',
+        fontSize: 20,
+        padding: 10,
+        color: 'white',
         height: windowHeight,
         backgroundColor: "#023047",
     },
@@ -87,7 +88,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
-      },
+    },
     background: {
         height: windowHeight,
         backgroundColor: "#023047",

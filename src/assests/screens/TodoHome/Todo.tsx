@@ -1,16 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Text, Pressable, Image, Dimensions, TextInput, FlatList, TouchableOpacity } from "react-native";
-import EncryptedStorage from "react-native-encrypted-storage";
-import { useFocusEffect, useIsFocused } from "@react-navigation/native";
+import {useIsFocused } from "@react-navigation/native";
 import StatTodo from "../TodoStat";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import RFValue from "react-native-responsive-fontsize";
-
-
-const windowWidth = Dimensions.get('window').width;
-const windowHeight = Dimensions.get('window').height;
 
 const TodoHome = ({ navigation }) => {
   const colors = ["#52D726", "#FFEC00", "#FF7300", "#FF0000", "#007ED6", "#7CDDDD"];
@@ -22,6 +16,7 @@ const TodoHome = ({ navigation }) => {
   const [checkedItems, setCheckedItems] = useState({});
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredTodos, setFilteredTodos] = useState([]);
+  const [isChecked, setIsChecked] = useState(false);
 
   useEffect(() => {
     if (Object.keys(regularCheckboxCount).length > 0) {
@@ -49,6 +44,7 @@ const TodoHome = ({ navigation }) => {
         // Add the marked todo to the 0 screen
         const updatedTodo = alltodos.find((todo, i) => todo.category === "Regular" && i === index);
         navigation.navigate("StatTodo", { updatedTodo });
+        
         console.log(updatedTodo)
       }
     }, 10);

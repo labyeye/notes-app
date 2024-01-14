@@ -149,7 +149,7 @@ const HomeScreen = ({ navigation }) => {
 
   return (
     <View style={styles.background}>
-      
+
       <View style={styles.searchtab}>
         <TextInput
           style={styles.input}
