@@ -75,11 +75,11 @@ android {
 
     namespace "com.notesapp"
     defaultConfig {
-        applicationId "com.notesapp"
+        applicationId "com.kalahanu.notesapp"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        versionCode 3
+        versionName "3.0"
     }
     signingConfigs {
         debug {
