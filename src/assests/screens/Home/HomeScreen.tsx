@@ -11,7 +11,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-
+import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads';
 import EncryptedStorage from "react-native-encrypted-storage";
 import { useIsFocused } from "@react-navigation/native";
 import { useEffect, useState } from "react";
@@ -22,13 +22,13 @@ const windowHeight = Dimensions.get("screen").height;
 type Note = {
   title: string;
   desc: string;
-  
+
 };
 interface NoteColors {
   [index: number]: string;
 }
 const HomeScreen = ({ navigation }) => {
-  
+
   const { userToken, signOut } = useAuth();
   const [noteColors, setNoteColors] = useState<NoteColors>({});
   const isFocused = useIsFocused();
@@ -42,7 +42,7 @@ const HomeScreen = ({ navigation }) => {
 
 
 
-  const getNoteColor = (index:number) => {
+  const getNoteColor = (index: number) => {
     if (noteColors[index]) {
       return noteColors[index];
     } else {
@@ -55,21 +55,21 @@ const HomeScreen = ({ navigation }) => {
   const saveNote = async (newNote: Note) => {
     let temp = allnotes.slice();
     let tempColors: { [key: number]: string } = { ...allColors };
-  
+
     const noteIndex = temp.length;
     const noteColor = tempColors[noteIndex];
-  
+
     temp.push(newNote);
     tempColors[noteIndex] = noteColor;
-  
+
     await EncryptedStorage.setItem("notes", JSON.stringify({ data: temp }));
     await EncryptedStorage.setItem("noteColors", JSON.stringify(tempColors));
-  
+
     getAllNotes();
   };
-  
 
-  const deleteNote = async (index:number) => {
+
+  const deleteNote = async (index: number) => {
     let newColors = { ...noteColors };
     let tempColors: { [key: number]: string } = { ...allColors };
 
@@ -85,7 +85,7 @@ const HomeScreen = ({ navigation }) => {
     getAllNotes();
   };
 
-  const navigateToEditScreen = (index:number) => {
+  const navigateToEditScreen = (index: number) => {
     const noteToEdit = allnotes[index];
     navigation.navigate("EditNotesScreen", {
       noteToEdit,
@@ -130,14 +130,14 @@ const HomeScreen = ({ navigation }) => {
     const noteColor = getNoteColor(index);
 
     return (
-      <TouchableOpacity onPress={() => navigateToEditScreen(index)} style={{alignItems:'center'}}>
+      <TouchableOpacity onPress={() => navigateToEditScreen(index)} style={{ alignItems: 'center' }}>
         <View style={styles.notetab}>
-          <View style={{ width: "80%", height: "100%"}}>
+          <View style={{ width: "80%", height: "100%" }}>
             <Text style={styles.title}>{item.title}</Text>
             <Text style={styles.desc}>{item.desc}</Text>
           </View>
           <TouchableOpacity
-            style={{ height: "100%",width:'15%', justifyContent: "center",}}
+            style={{ height: "100%", width: '15%', justifyContent: "center", }}
             onPress={() => deleteNote(index)}
           >
             <Image style={styles.delete} source={require("../../Images/bin.png")} />
@@ -151,14 +151,14 @@ const HomeScreen = ({ navigation }) => {
     <View style={styles.background}>
 
       <View style={styles.searchtab}>
-        <TouchableOpacity style={{backgroundColor:'white',width:"100%",height:"20%"}}onPress={() => navigation.navigate('InterstitialAd')}></TouchableOpacity>
+
         <TextInput
           style={styles.input}
           placeholder="Search..."
           value={searchQuery}
           onChangeText={(text) => setSearchQuery(text)}
         />
-        
+
       </View>
       <View style={styles.noteback}>
         <FlatList
@@ -167,14 +167,22 @@ const HomeScreen = ({ navigation }) => {
           keyExtractor={(item, index) => index.toString()}
         />
       </View>
-
+      <View>
+        <BannerAd
+          unitId={Platform.OS === 'ios'
+            ? 'ca-app-pub-6119758783032593/3560176294'
+            : null}
+          size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+          requestOptions={{ requestNonPersonalizedAdsOnly: true }}
+        />
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   delete: {
-    position:'absolute',
+    position: 'absolute',
     width: 35,
     height: 35,
   },
@@ -208,14 +216,14 @@ const styles = StyleSheet.create({
   searchtab: {
     width: wp('100%'),
     height: hp('10%'),
-    marginTop: hp('5%'),
+    marginTop: hp('7%'),
     flexDirection: "column",
     justifyContent: "space-between",
     paddingHorizontal: wp('5%'), // Adjust the paddingHorizontal value as needed
     alignItems: "center",
   },
   background: {
-    flex:1,
+    flex: 1,
     backgroundColor: "#023047",
     flexDirection: "column",
     alignItems: "center",
@@ -230,11 +238,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10, // Add some padding for better separation
     justifyContent: 'space-between', // Align items vertically
   },
-  
+
   noteback: {
-    flex:1,
-    alignItems:'center',
-    justifyContent:'center'
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
   },
 });
 

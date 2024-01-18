@@ -9,7 +9,6 @@ import { Image, StyleSheet } from "react-native";
 import StatTodo from "./src/assests/screens/TodoStat/StatTodo";
 import DoneTodo from "./src/assests/screens/DoneTodo/DoneTodo";
 import AddNotes from "./src/assests/screens/AddNotes/AddNotes";
-
 import { AuthProvider } from "./AuthContext";
 import { navigationRef } from "./navigationRef";
 import EditNotesScreen from "./src/assests/screens/EditNotes/EditNotes";
@@ -82,6 +81,7 @@ const App = () => {
             component={TabNavigator}
             options={{ headerShown: false }}
           />
+          
           <Stack.Screen name="StatTodo" component={StatTodo} />
           <Stack.Screen name="DoneTodo" component={DoneTodo} />
           <Stack.Screen name="AddTodo" component={AddTodo} />
