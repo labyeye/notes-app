@@ -151,6 +151,7 @@ const HomeScreen = ({ navigation }) => {
     <View style={styles.background}>
 
       <View style={styles.searchtab}>
+        <TouchableOpacity style={{backgroundColor:'white',width:"100%",height:"20%"}}onPress={() => navigation.navigate('InterstitialAd')}></TouchableOpacity>
         <TextInput
           style={styles.input}
           placeholder="Search..."
@@ -208,7 +209,7 @@ const styles = StyleSheet.create({
     width: wp('100%'),
     height: hp('10%'),
     marginTop: hp('5%'),
-    flexDirection: "row",
+    flexDirection: "column",
     justifyContent: "space-between",
     paddingHorizontal: wp('5%'), // Adjust the paddingHorizontal value as needed
     alignItems: "center",

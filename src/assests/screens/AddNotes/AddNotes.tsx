@@ -6,7 +6,6 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-
 const AddNotes = ({ navigation }) => {
     const [title, setitle] = useState("");
     const [desc, setdesc] = useState("");

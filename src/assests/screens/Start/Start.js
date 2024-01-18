@@ -39,7 +39,7 @@ const Start = ({ navigation }) => {
         <Text style={styles.title}>Note Sphere</Text>
         <Text style={styles.desc}>"Think, Note, Thrive."</Text>
         <TouchableOpacity style={styles.getbtn} onPress={() => navigation.navigate('Main', { screen: 'HomeScreen' })}>
-          <Text style={{ textAlign: "center" }}>Get Started</Text>
+          <Text style={{ textAlign: "center" ,}}>Get Started</Text>
         </TouchableOpacity>
       </View>
     </View>

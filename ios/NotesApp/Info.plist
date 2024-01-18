@@ -2,6 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>FacebookAppID</key>
+    <string>1033386364401025</string>
+    <key>FacebookDisplayName</key>
+    <string>Notes Sphere</string>
 	<key>GADApplicationIdentifier</key>
 	<string>ca-app-pub-6119758783032593~6186339639</string>
 	<key>CFBundleDevelopmentRegion</key>
