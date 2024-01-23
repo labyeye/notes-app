@@ -155,6 +155,7 @@ const HomeScreen = ({ navigation }) => {
         <TextInput
           style={styles.input}
           placeholder="Search..."
+          textAlign="center"
           value={searchQuery}
           onChangeText={(text) => setSearchQuery(text)}
         />
@@ -170,7 +171,7 @@ const HomeScreen = ({ navigation }) => {
       <View>
         <BannerAd
           unitId={Platform.OS === 'ios'
-            ? 'ca-app-pub-6119758783032593/3560176294'
+            ? 'ca-app-pub-6119758783032593/4124837401'
             : null}
           size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
           requestOptions={{ requestNonPersonalizedAdsOnly: true }}
@@ -224,17 +225,16 @@ const styles = StyleSheet.create({
   },
   background: {
     flex: 1,
-    backgroundColor: "#023047",
+    backgroundColor: "#99BC85",
     flexDirection: "column",
     alignItems: "center",
   },
   notetab: {
-    borderRadius: 10,
     marginTop: 10,
     flexDirection: "row",
     height: 100, // Set a fixed height for each note
-    backgroundColor: "#219ebc",
-    width: "95%",
+    backgroundColor: "#E1F0DA",
+    width: "100%",
     paddingHorizontal: 10, // Add some padding for better separation
     justifyContent: 'space-between', // Align items vertically
   },

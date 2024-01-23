@@ -87,16 +87,14 @@ const styles = StyleSheet.create({
         padding:10,
         height: "10%",
         color:'white',
-        backgroundColor: '#023047'
-    },
+        backgroundColor: "#99BC85",    },
     adddesc: {
         width: windowWidth,
         fontSize:20,
         padding:10,
         color:'white',
         height: windowHeight,
-        backgroundColor: '#023047'
-    },
+        backgroundColor: "#99BC85",    },
     delete: {
         marginVertical: -50,
         width: 30,
@@ -138,7 +136,7 @@ const styles = StyleSheet.create({
     background: {
         height: windowHeight,
         width: windowWidth,
-        backgroundColor: "#023047",
+        backgroundColor: "#99BC85",
         flexDirection: 'column',
         alignItems: 'center',
     },

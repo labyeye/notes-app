@@ -14,15 +14,15 @@ import { navigationRef } from "./navigationRef";
 import EditNotesScreen from "./src/assests/screens/EditNotes/EditNotes";
 import AddTodo from "./src/assests/screens/AddTodo/AddTodo";
 import Add from "./src/assests/screens/AddScreen/Add";
-
+import EditTodo from "./src/assests/screens/EditTodo";
 const Stack = createNativeStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
 
 const TabNavigator = () => (
   <Tab.Navigator
-    activeColor="white"
+    activeColor="#4F6F52"
     inactiveColor="white"
-    barStyle={{ backgroundColor: '#023047' }}
+    barStyle={{ backgroundColor: '#BFD8AF' }}
     shifting={true}
   >
     <Tab.Screen
@@ -86,7 +86,7 @@ const App = () => {
           <Stack.Screen name="DoneTodo" component={DoneTodo} />
           <Stack.Screen name="AddTodo" component={AddTodo} />
           <Stack.Screen name="AddNotes" component={AddNotes} />
-
+          <Stack.Screen name="EditTodo" component={EditTodo} />
           <Stack.Screen name="EditNotesScreen" component={EditNotesScreen} />
         </Stack.Navigator>
       </AuthProvider>

@@ -23,11 +23,18 @@ const TodoHome = ({ navigation }) => {
       navigation.setParams({
         regularCheckboxCount: regularCheckboxCount,
       });
-      console.log(["check", JSON.stringify(regularCheckboxCount)])
       AsyncStorage.setItem('checkbox', JSON.stringify(regularCheckboxCount));
     }
   }, [regularCheckboxCount]);
 
+  const handleTodoPress = (noteToEdit, index) => {
+    navigation.navigate('EditTodo', {
+      noteTotodo: noteToEdit,
+      index: index,
+    });
+  };
+  
+  
 
   const handledone = async (category, index) => {
     setShowDoneAnimation(true);
@@ -37,7 +44,6 @@ const TodoHome = ({ navigation }) => {
 
         setRegularCheckboxCount((prevCounts) => {
           const updatedCounts = { ...prevCounts, [index]: (prevCounts[index] || 0) + 1 };
-          console.log("Updated Counts:", updatedCounts);
           return updatedCounts;
         });
 
@@ -45,7 +51,6 @@ const TodoHome = ({ navigation }) => {
         const updatedTodo = alltodos.find((todo, i) => todo.category === "Regular" && i === index);
         navigation.navigate("StatTodo", { updatedTodo });
         
-        console.log(updatedTodo)
       }
     }, 10);
 
@@ -95,7 +100,9 @@ const TodoHome = ({ navigation }) => {
 
 
   useEffect(() => {
-    getAllTodos();
+    if (isFocused) {
+      getAllTodos();
+    }
   }, [isFocused]);
 
   const handleSearch = (query) => {
@@ -128,7 +135,7 @@ const TodoHome = ({ navigation }) => {
 
 
     return (
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => handleTodoPress(item, index)}>
         <View style={[styles.notetab, { backgroundColor }]}>
           <View style={{ width: "90%", height: "100%", flexDirection: "row", alignSelf: 'center' }}>
             <View style={{ justifyContent: "center", height: "100%", alignItems: "center", width: '25%', alignSelf: 'flex-start' }}>
@@ -169,6 +176,7 @@ const TodoHome = ({ navigation }) => {
         <TextInput
           style={styles.input}
           placeholder="Search..."
+          textAlign="center"
           value={searchQuery}
           onChangeText={(text) => handleSearch(text)}
         />
@@ -203,7 +211,7 @@ const styles = StyleSheet.create({
   background: {
     height: "100%",
     width: "100%",
-    backgroundColor: '#023047',
+    backgroundColor: '#99BC85',
     flexDirection: 'column',
     alignItems: 'center',
   },

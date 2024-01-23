@@ -3,13 +3,39 @@ import { StyleSheet, View, Text, Pressable, Image, Dimensions, TextInput, Toucha
 import { useState,useEffect } from "react";
 import EncryptedStorage from "react-native-encrypted-storage";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { AdEventType, InterstitialAd } from "react-native-google-mobile-ads";
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
-
+const adUnitId = 'ca-app-pub-6119758783032593/8942474846';
+const interstitial = InterstitialAd.createForAdRequest(adUnitId, {
+    keywords: ['fashion', 'clothing'],
+});
 const AddNotes = ({ navigation }) => {
     const [title, setitle] = useState("");
     const [desc, setdesc] = useState("");
+    const [loaded, setLoaded] = useState(false);
+    const [adLoaded, setadLoaded] = useState(false);
+    useEffect(() => {
+        const unsubscribeLoaded = interstitial.addAdEventListener(AdEventType.LOADED, () => {
+            setLoaded(true);
+            setadLoaded(true); // Update adLoaded state
+        });
     
+        // Start loading the interstitial straight away
+        interstitial.load();
+    
+        // Unsubscribe from events on unmount
+        return () => {
+            unsubscribeLoaded();
+        };
+    }, []);
+    const handleCalculatePress = () => {
+        if (adLoaded) {
+            interstitial.show();
+        } else {
+            savenote();
+        }
+    };
     const savenote = async () => {
         try {
             
@@ -35,7 +61,7 @@ const AddNotes = ({ navigation }) => {
                 <Pressable onPress={() => navigation.navigate("Home")}>
                     <Image style={styles.searchimg} source={require('../../Images/back.png')} />
                 </Pressable>
-                <Pressable onPress={() => savenote()}>
+                <Pressable onPress={handleCalculatePress}>
                     <Image style={styles.saveimg} source={require('../../Images/diskette.png')} />
                 </Pressable>
             </View>
