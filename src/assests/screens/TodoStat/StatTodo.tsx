@@ -23,7 +23,6 @@ const StatTodo = ({ navigation, route }) => {
       if (storedTodos == null)
         return
       let data = JSON.parse(storedTodos);
-      // Retrieve regularCheckboxCount from local storage
       let storedCounts = await AsyncStorage.getItem('checkbox');
       console.log(["Stored Counts:", storedCounts]);
 
@@ -33,7 +32,6 @@ const StatTodo = ({ navigation, route }) => {
         setRegularCheckboxCount(counts || {});
         setSeries(Object.values(counts || {}));
       } else {
-        // Set default value if 'checkbox' item is not found
         setRegularCheckboxCount({});
         setSeries([]);
       }
@@ -99,7 +97,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     width: "100%",
     height: "100%",
-    backgroundColor: "#023047",
+    backgroundColor: '#99BC85',
   },
   search: {
     width: "50%",
@@ -124,8 +122,7 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   listItem: {
-    backgroundColor: '#fcaf08',
-    borderRadius: 20,
+    backgroundColor: "#E1F0DA",
     flexDirection: 'column',
     justifyContent: 'center',
     marginTop: 10,

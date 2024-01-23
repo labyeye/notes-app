@@ -39,7 +39,7 @@ const Start = ({ navigation }) => {
         <Text style={styles.title}>Note Sphere</Text>
         <Text style={styles.desc}>"Think, Note, Thrive."</Text>
         <TouchableOpacity style={styles.getbtn} onPress={() => navigation.navigate('Main', { screen: 'HomeScreen' })}>
-          <Text style={{ textAlign: "center" ,}}>Get Started</Text>
+          <Text style={{ textAlign: "center" ,color:'white',fontWeight:'bold'}}>Get Started</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     width: "90%",
     height: "6%",
     marginTop: 50,
-    backgroundColor: '#8ecae6'
+    backgroundColor: '#4F6F52'
   },
   title: {
     color: 'white',
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
   container: {
     height: windowHeight,
     width: windowWidth,
-    backgroundColor: '#023047',
+    backgroundColor: '#99BC85',
     justifyContent: 'center',
     alignItems: 'center'
   }

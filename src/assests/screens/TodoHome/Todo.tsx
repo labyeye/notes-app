@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Text, Pressable, Image, Dimensions, TextInput, FlatList, TouchableOpacity } from "react-native";
-import {useIsFocused } from "@react-navigation/native";
+import { useIsFocused } from "@react-navigation/native";
 import StatTodo from "../TodoStat";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 const TodoHome = ({ navigation }) => {
-  const colors = ["#52D726", "#FFEC00", "#FF7300", "#FF0000", "#007ED6", "#7CDDDD"];
   const [showDoneAnimation, setShowDoneAnimation] = React.useState(false);
   const isFocused = useIsFocused();
   const [noteColors, setNoteColors] = useState({});
@@ -16,7 +15,6 @@ const TodoHome = ({ navigation }) => {
   const [checkedItems, setCheckedItems] = useState({});
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredTodos, setFilteredTodos] = useState([]);
-  const [isChecked, setIsChecked] = useState(false);
 
   useEffect(() => {
     if (Object.keys(regularCheckboxCount).length > 0) {
@@ -33,8 +31,8 @@ const TodoHome = ({ navigation }) => {
       index: index,
     });
   };
-  
-  
+
+
 
   const handledone = async (category, index) => {
     setShowDoneAnimation(true);
@@ -50,7 +48,7 @@ const TodoHome = ({ navigation }) => {
         // Add the marked todo to the 0 screen
         const updatedTodo = alltodos.find((todo, i) => todo.category === "Regular" && i === index);
         navigation.navigate("StatTodo", { updatedTodo });
-        
+
       }
     }, 10);
 
@@ -132,13 +130,11 @@ const TodoHome = ({ navigation }) => {
   const renderItem = ({ item, index }) => {
     const isChecked = checkedItems[`${item.category}_${index}`] || false;
     const backgroundColor = item.category === "Regular" ? "#fb8500" : "#ffb703";
-
-
     return (
       <TouchableOpacity onPress={() => handleTodoPress(item, index)}>
-        <View style={[styles.notetab, { backgroundColor }]}>
-          <View style={{ width: "90%", height: "100%", flexDirection: "row", alignSelf: 'center' }}>
-            <View style={{ justifyContent: "center", height: "100%", alignItems: "center", width: '25%', alignSelf: 'flex-start' }}>
+        <View style={styles.notetab}>
+          <View style={{ width: "99%", height: "100%", flexDirection: "row", alignSelf: 'center' }}>
+            <View style={{ justifyContent: "center", height: "100%", alignItems: "center", width: '20%', alignSelf: 'flex-start' }}>
               <BouncyCheckbox
                 size={25}
                 fillColor="black"
@@ -152,21 +148,19 @@ const TodoHome = ({ navigation }) => {
                 isChecked={checkedItems[`${item.category}_${index}`]}
               />
             </View>
-            <View style={{ justifyContent: 'center',width: "60%", height: '60%', alignSelf: 'center' }}>
+            <View style={{ justifyContent: 'center', width: "60%", height: '100%', alignSelf: 'center', }}>
               <Text style={styles.title}>{item.title}</Text>
             </View>
           </View>
-          <Pressable
-            style={{  justifyContent: 'center', borderWidth:1,alignItems: 'flex-end' }}
-            onPress={() => handleDelete(index, item.category)}>
-            <Image style={styles.delete} source={require('../../Images/bin.png')} />
-          </Pressable>
+            <Pressable
+              style={{ justifyContent: 'center', alignItems: 'flex-end',height:"100%",width:"0%"}}
+              onPress={() => handleDelete(index, item.category)}>
+              <Image style={styles.delete} source={require('../../Images/bin.png')} />
+            </Pressable>
         </View>
       </TouchableOpacity>
     );
   };
-
-
   return (
     <View style={styles.background}>
       <View style={styles.searchtab}>
@@ -180,9 +174,9 @@ const TodoHome = ({ navigation }) => {
           value={searchQuery}
           onChangeText={(text) => handleSearch(text)}
         />
-        
+
       </View>
-      <View style={{width:"100%",flexDirection:'row',alignItems:'flex-start',marginLeft:30,marginTop:20}}>
+      <View style={{ width: "100%", flexDirection: 'row', alignItems: 'flex-start', marginLeft: 30, marginTop: 20 }}>
         <Text style={{ color: 'white', fontSize: 20, marginBottom: 10 }}>Regular Todos</Text>
       </View>
       <View style={styles.noteback}>
@@ -192,7 +186,7 @@ const TodoHome = ({ navigation }) => {
           keyExtractor={(item, index) => `Regular_${index}`}
         />
       </View>
-      <View style={{width:"100%",flexDirection:'row',alignItems:'flex-start',marginLeft:30,marginTop:10}}>
+      <View style={{ width: "100%", flexDirection: 'row', alignItems: 'flex-start', marginLeft: 30, marginTop: 10 }}>
         <Text style={{ color: 'white', fontSize: 20, marginBottom: 10 }}>Occasional Todos</Text>
       </View>
       <View style={styles.noteback}>
@@ -216,14 +210,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   notetab: {
-    borderRadius: 5,
     marginTop: 10,
     flexDirection: 'row',
     alignItems: 'center',
     height: 80,
-    backgroundColor: '#32CD32',
+    backgroundColor: "#E1F0DA",
     width: "100%",
-    gap: 20
   },
   delete: {
     position: 'absolute',
@@ -284,7 +276,7 @@ const styles = StyleSheet.create({
   },
   noteback: {
     height: "40%",
-    width: "95%",
+    width: "100%",
     marginTop: 10,
     alignItems: 'center'
   }

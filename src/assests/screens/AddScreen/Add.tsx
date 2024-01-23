@@ -7,13 +7,13 @@ const Add = ({ navigation }) => {
         <View style={styles.background}>
             <Pressable onPress={() => navigation.navigate('AddNotes')}
                 style={styles.notetab}>
-                <LottieView style={{ height: "100%", width: "100%", alignSelf: 'center' }}
+                <LottieView style={{ height: "80%", width: "80%", alignSelf: 'center' }}
                     source={require('../../Animations/notes.json')} autoPlay={true} loop={true} />
             </Pressable>
             <Text style={{fontSize:30,color:'white'}}>Notes</Text>
             <Pressable onPress={() => navigation.navigate('AddTodo')}
                 style={styles.todotab}>
-                <LottieView style={{ height: "100%", width: "100%", }}
+                <LottieView style={{ height: "80%", width: "80%", }}
                     source={require('../../Animations/todo.json')} autoPlay={true} loop={true} />
 
             </Pressable>
@@ -42,6 +42,7 @@ const styles = StyleSheet.create({
         borderRadius:100,
         width: "38%",
         height: "20%",
+        alignItems:'center',
         justifyContent: 'center' 
     },
 });

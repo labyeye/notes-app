@@ -87,13 +87,12 @@ const styles = StyleSheet.create({
       padding:10,
       height: "30%",
       color:'white',
-      backgroundColor: "#023047",
-  },
+      backgroundColor: "#99BC85",  },
   
    container: {
       height: windowHeight,
       width: windowWidth,
-      backgroundColor: "#023047",
+      backgroundColor: "#99BC85",      
       flexDirection: "column",
       alignItems: "center",
    },
