@@ -1,5 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useState } from "react";
+import { AdEventType, InterstitialAd } from "react-native-google-mobile-ads";
+
 import {
    Dimensions,
    Image,
@@ -13,17 +15,40 @@ import Picker from "react-native-picker-select";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
-
+const adUnitId = 'ca-app-pub-6119758783032593/8942474846';
+const interstitial = InterstitialAd.createForAdRequest(adUnitId, {
+    keywords: ['fashion', 'clothing'],
+});
 const AddTodo = ({ navigation }) => {
    
    const [selectedCategory, setSelectedCategory] = useState("Regular");
    const [title, setitle] = useState("");
    const [desc, setdesc] = useState("");
    const newTodo = { title, desc, category: selectedCategory };
-
+   useEffect(() => {
+      const unsubscribeLoaded = interstitial.addAdEventListener(AdEventType.LOADED, () => {
+          setLoaded(true);
+          setadLoaded(true); // Update adLoaded state
+      });
+  
+      // Start loading the interstitial straight away
+      interstitial.load();
+  
+      // Unsubscribe from events on unmount
+      return () => {
+          unsubscribeLoaded();
+      };
+  }, []);
    const handleCategoryChange = (category) => {
       setSelectedCategory(category);
    };
+   const handleCalculatePress = () => {
+      if (adLoaded) {
+          interstitial.show();
+      } else {
+          savetodo();
+      }
+  };
    const savetodo = async () => {
       try {
         let existingTodo = await AsyncStorage.getItem('todo');
@@ -50,7 +75,7 @@ const AddTodo = ({ navigation }) => {
             <Pressable onPress={() => navigation.navigate("Main", { screen: "HomeScreen" })}>
                <Image style={styles.searchimg} source={require("../../Images/back.png")} />
             </Pressable>
-            <Pressable onPress={() => savetodo()}>
+            <Pressable onPress={handleCalculatePress}>
                <Image style={styles.searchimg} source={require("../../Images/save.png")} />
             </Pressable>
             <View style={styles.categoryTab}>

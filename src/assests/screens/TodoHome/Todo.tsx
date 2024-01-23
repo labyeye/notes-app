@@ -5,6 +5,7 @@ import StatTodo from "../TodoStat";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads';
 
 const TodoHome = ({ navigation }) => {
   const [showDoneAnimation, setShowDoneAnimation] = React.useState(false);
@@ -191,6 +192,15 @@ const TodoHome = ({ navigation }) => {
           data={filteredTodos.filter(todo => todo.category === "Occasional")}
           renderItem={renderItem}
           keyExtractor={(item, index) => `Occasional_${index}`}
+        />
+      </View>
+      <View>
+        <BannerAd
+          unitId={Platform.OS === 'ios'
+            ? 'ca-app-pub-6119758783032593/4124837401'
+            : null}
+          size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+          requestOptions={{ requestNonPersonalizedAdsOnly: true }}
         />
       </View>
       <StatTodo regularCheckboxCount={regularCheckboxCount} navigation={navigation} />
