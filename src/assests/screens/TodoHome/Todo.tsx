@@ -25,12 +25,8 @@ const TodoHome = ({ navigation }) => {
     }
   }, [regularCheckboxCount]);
 
-  const handleTodoPress = (noteToEdit, index) => {
-    navigation.navigate('EditTodo', {
-      noteTotodo: noteToEdit,
-      index: index,
-    });
-  };
+  
+  
 
 
 
@@ -39,30 +35,31 @@ const TodoHome = ({ navigation }) => {
     setTimeout(() => {
       setShowDoneAnimation(false);
       if (category === "Regular") {
-
         setRegularCheckboxCount((prevCounts) => {
           const updatedCounts = { ...prevCounts, [index]: (prevCounts[index] || 0) + 1 };
           return updatedCounts;
         });
-
+  
         // Add the marked todo to the 0 screen
         const updatedTodo = alltodos.find((todo, i) => todo.category === "Regular" && i === index);
         navigation.navigate("StatTodo", { updatedTodo });
-
       }
     }, 10);
-
+  
     try {
+      // Retrieve the updated todos from AsyncStorage
       const storedTodos = await AsyncStorage.getItem('todo');
       let data = JSON.parse(storedTodos);
-
+  
       if (data && data.data) {
         setAllTodos(data.data);
+        setFilteredTodos(data.data);
       }
     } catch (error) {
       console.error("Error retrieving todos:", error);
     }
   };
+  
   useEffect(() => {
     const unsubscribeFocus = navigation.addListener('focus', () => {
       setCheckedItems({});
@@ -131,7 +128,7 @@ const TodoHome = ({ navigation }) => {
     const isChecked = checkedItems[`${item.category}_${index}`] || false;
     const backgroundColor = item.category === "Regular" ? "#fb8500" : "#ffb703";
     return (
-      <TouchableOpacity onPress={() => handleTodoPress(item, index)}>
+      <TouchableOpacity>
         <View style={styles.notetab}>
           <View style={{ width: "99%", height: "100%", flexDirection: "row", alignSelf: 'center' }}>
             <View style={{ justifyContent: "center", height: "100%", alignItems: "center", width: '20%', alignSelf: 'flex-start' }}>

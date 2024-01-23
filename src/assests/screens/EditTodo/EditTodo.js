@@ -7,28 +7,31 @@ const EditTodo = ({ route, navigation }) => {
     const [editedTitle, setEditedTitle] = useState(noteTotodo.title);
   
     const handleSaveChanges = async () => {
-        try {
-          // Retrieve the existing todos from AsyncStorage
-          const storedTodos = await AsyncStorage.getItem('todo');
-          let data = JSON.parse(storedTodos);
-      
-          if (data && data.data) {
-            // Update the title of the corresponding todo
-            data.data[index].title = editedTitle;
-      
-            // Log the updated data
-            console.log('Updated Data:', data);
-      
-            // Save the updated todos back to AsyncStorage
-            await AsyncStorage.setItem('todo', JSON.stringify(data));
-      
-            // Navigate back to TodoHome
-            navigation.goBack();
-          }
-        } catch (error) {
-          console.error('Error saving changes:', error);
+      try {
+        // Retrieve the existing todos from AsyncStorage
+        const storedTodos = await AsyncStorage.getItem('todo');
+        let data = JSON.parse(storedTodos);
+    
+        if (data && data.data) {
+          // Update the title of the corresponding todo
+          data.data[index].title = editedTitle;
+    
+          // Log the updated data
+          console.log('Updated Data:', data);
+    
+          // Save the updated todos back to AsyncStorage
+          await AsyncStorage.setItem('todo', JSON.stringify(data));
+    
+          // Send back the updated note to the TodoHome screen
+          navigation.goBack({ updatedNote: data.data[index] });
         }
-      };
+      } catch (error) {
+        console.error('Error saving changes:', error);
+      }
+    };
+    
+    
+    
       
   
     return (
