@@ -1,5 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import React, { useState } from "react";
+import React, { useState ,useEffect} from "react";
 import { AdEventType, InterstitialAd } from "react-native-google-mobile-ads";
 
 import {
@@ -24,6 +24,8 @@ const AddTodo = ({ navigation }) => {
    const [selectedCategory, setSelectedCategory] = useState("Regular");
    const [title, setitle] = useState("");
    const [desc, setdesc] = useState("");
+   const [loaded, setLoaded] = useState(false);
+    const [adLoaded, setadLoaded] = useState(false);
    const newTodo = { title, desc, category: selectedCategory };
    useEffect(() => {
       const unsubscribeLoaded = interstitial.addAdEventListener(AdEventType.LOADED, () => {
