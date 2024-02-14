@@ -13,29 +13,6 @@ const interstitial = InterstitialAd.createForAdRequest(adUnitId, {
 const AddNotes = ({ navigation }) => {
     const [title, setitle] = useState("");
     const [desc, setdesc] = useState("");
-    const [loaded, setLoaded] = useState(false);
-    const [adLoaded, setadLoaded] = useState(false);
-    useEffect(() => {
-        const unsubscribeLoaded = interstitial.addAdEventListener(AdEventType.LOADED, () => {
-            setLoaded(true);
-            setadLoaded(true); // Update adLoaded state
-        });
-    
-        // Start loading the interstitial straight away
-        interstitial.load();
-    
-        // Unsubscribe from events on unmount
-        return () => {
-            unsubscribeLoaded();
-        };
-    }, []);
-    const handleCalculatePress = () => {
-        if (adLoaded) {
-            interstitial.show();
-        } else {
-            savenote();
-        }
-    };
     const savenote = async () => {
         try {
             
@@ -61,7 +38,7 @@ const AddNotes = ({ navigation }) => {
                 <Pressable onPress={() => navigation.navigate("Home")}>
                     <Image style={styles.searchimg} source={require('../../Images/back.png')} />
                 </Pressable>
-                <Pressable onPress={handleCalculatePress}>
+                <Pressable onPress={savenote}>
                     <Image style={styles.saveimg} source={require('../../Images/diskette.png')} />
                 </Pressable>
             </View>
