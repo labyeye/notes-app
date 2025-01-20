@@ -7,7 +7,6 @@ const windowWidth = Dimensions.get('screen').width;
 const windowHeight = Dimensions.get('screen').height;
 
 const Start = ({ navigation }) => {
-  
 
   const checkIfStartScreenSeen = async () => {
     try {
@@ -19,16 +18,26 @@ const Start = ({ navigation }) => {
     }
   };
 
+  const markStartScreenAsSeen = async () => {
+    try {
+      await AsyncStorage.setItem('startScreenSeen', 'true');
+    } catch (error) {
+      console.error('Error setting start screen status:', error);
+    }
+  };
 
   useEffect(() => {
-    // Check if the start screen has been seen before
     checkIfStartScreenSeen().then((startScreenSeen) => {
       if (startScreenSeen) {
-        // If seen before, remove the Start screen from the navigation stack
         navigation.replace('Main', { screen: 'HomeScreen' });
       }
     });
   }, [navigation]);
+
+  const handleGetStarted = async () => {
+    await markStartScreenAsSeen(); 
+    navigation.replace('Main', { screen: 'HomeScreen' }); 
+  };
 
   return (
     <View style={styles.container}>
@@ -38,8 +47,8 @@ const Start = ({ navigation }) => {
           source={require('../../Animations/notes.json')} autoPlay={true} loop={true} />
         <Text style={styles.title}>Note Sphere</Text>
         <Text style={styles.desc}>"Think, Note, Thrive."</Text>
-        <TouchableOpacity style={styles.getbtn} onPress={() => navigation.navigate('Main', { screen: 'HomeScreen' })}>
-          <Text style={{ textAlign: "center" ,color:'white',fontWeight:'bold'}}>Get Started</Text>
+        <TouchableOpacity style={styles.getbtn} onPress={handleGetStarted}>
+          <Text style={{ textAlign: "center", color: 'white', fontWeight: 'bold' }}>Get Started</Text>
         </TouchableOpacity>
       </View>
     </View>

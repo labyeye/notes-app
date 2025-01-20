@@ -98,28 +98,38 @@ const HomeScreen = ({ navigation }) => {
   const getAllNotes = async () => {
     try {
       let x = [];
-      let y = await EncryptedStorage.getItem("notes");
-
-      if (y !== null) {
-        let data = JSON.parse(y);
-        if (data && data.data) {
-          x = data.data;
+      const storedNotes = await EncryptedStorage.getItem("notes");
+  
+      if (storedNotes) {
+        try {
+          const parsedNotes = JSON.parse(storedNotes);
+          if (parsedNotes && parsedNotes.data) {
+            x = parsedNotes.data;
+          }
+        } catch (error) {
+          console.error("Error parsing stored notes:", error);
         }
       }
-
+  
       setAll(x);
-
-      let colorData: string | null = await EncryptedStorage.getItem("noteColors");
-      let colors: { [key: string]: string } = {};
-
-      if (colorData) {
-        colors = JSON.parse(colorData);
+  
+      const storedColors = await EncryptedStorage.getItem("noteColors");
+      let colors = {};
+  
+      if (storedColors) {
+        try {
+          colors = JSON.parse(storedColors);
+        } catch (error) {
+          console.error("Error parsing note colors:", error);
+        }
       }
+  
       setAllColors(colors || {});
     } catch (error) {
-      console.error("Error parsing JSON:", error);
+      console.error("Error fetching notes or colors:", error);
     }
   };
+  
 
 
   const filteredNotes = allnotes.filter((item) =>

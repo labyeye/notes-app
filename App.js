@@ -15,6 +15,8 @@ import EditNotesScreen from "./src/assests/screens/EditNotes/EditNotes";
 import AddTodo from "./src/assests/screens/AddTodo/AddTodo";
 import Add from "./src/assests/screens/AddScreen/Add";
 import EditTodo from "./src/assests/screens/EditTodo";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 const Stack = createNativeStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
 
@@ -22,7 +24,7 @@ const TabNavigator = () => (
   <Tab.Navigator
     activeColor="#4F6F52"
     inactiveColor="white"
-    barStyle={{ backgroundColor: '#BFD8AF' }}
+    barStyle={{ backgroundColor: "#BFD8AF" }}
     shifting={true}
   >
     <Tab.Screen
@@ -30,16 +32,26 @@ const TabNavigator = () => (
       component={HomeScreen}
       options={{
         tabBarIcon: ({ focused }) => (
-          <Image source={require('./src/assests/Images/noty.png')} style={{ tintColor: focused ? 'black' : 'white' }} />
+          <Image
+            source={require("./src/assests/Images/noty.png")}
+            style={{ tintColor: focused ? "black" : "white" }}
+          />
         ),
       }}
     />
-     <Tab.Screen
+    <Tab.Screen
       name="Add"
       component={Add}
       options={{
         tabBarIcon: ({ focused }) => (
-          <Image source={require('./src/assests/Images/plus.png')} style={{ tintColor: focused ? 'black' : 'white' ,width:"50%",justifyContent:'center'}} />
+          <Image
+            source={require("./src/assests/Images/plus.png")}
+            style={{
+              tintColor: focused ? "black" : "white",
+              width: "50%",
+              justifyContent: "center",
+            }}
+          />
         ),
       }}
     />
@@ -48,7 +60,10 @@ const TabNavigator = () => (
       component={TodoHome}
       options={{
         tabBarIcon: ({ focused }) => (
-          <Image source={require('./src/assests/Images/done.png')} style={{ tintColor: focused ? 'black' : 'white' }} />
+          <Image
+            source={require("./src/assests/Images/done.png")}
+            style={{ tintColor: focused ? "black" : "white" }}
+          />
         ),
       }}
     />
@@ -56,21 +71,33 @@ const TabNavigator = () => (
 );
 
 const App = () => {
-  const [hideSplashScreen, setHideSplashScreen] = React.useState(true);
+  const [initialRoute, setInitialRoute] = React.useState("Start");
 
   React.useEffect(() => {
-    // Simulate a delay for the splash screen
-    const timer = setTimeout(() => {
-      setHideSplashScreen(false);
-    }, 2000); // Adjust the delay as needed
+    const checkStartScreenSeen = async () => {
+      try {
+        const startScreenSeen = await AsyncStorage.getItem("startScreenSeen");
+        setInitialRoute(startScreenSeen === "true" ? "Main" : "Start");
+      } catch (error) {
+        console.error("Error checking start screen status:", error);
+      }
+    };
 
-    return () => clearTimeout(timer);
+    checkStartScreenSeen();
   }, []);
+
+  if (!initialRoute) {
+    // Optional splash screen or loading indicator
+    return null;
+  }
 
   return (
     <NavigationContainer ref={navigationRef}>
       <AuthProvider>
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Navigator
+          initialRouteName={initialRoute}
+          screenOptions={{ headerShown: false }}
+        >
           <Stack.Screen
             name="Start"
             component={Start}
@@ -81,7 +108,6 @@ const App = () => {
             component={TabNavigator}
             options={{ headerShown: false }}
           />
-          
           <Stack.Screen name="StatTodo" component={StatTodo} />
           <Stack.Screen name="DoneTodo" component={DoneTodo} />
           <Stack.Screen name="AddTodo" component={AddTodo} />
