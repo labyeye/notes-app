@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   View,
@@ -9,30 +9,29 @@ import {
   TextInput,
   FlatList,
   TouchableOpacity,
+  Platform,
 } from "react-native";
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "react-native-responsive-screen";
+import {
+  BannerAd,
+  BannerAdSize,
+} from "react-native-google-mobile-ads";
 import EncryptedStorage from "react-native-encrypted-storage";
 import { useIsFocused } from "@react-navigation/native";
-import { useEffect, useState } from "react";
 import { useAuth } from "../../../../AuthContext";
+
 const colors = ["#ADE8F4", "#90E0EF", "#48CAE4", "#0096C7", "#0077B6", "#CAF0F8"];
 const windowWidth = Dimensions.get("screen").width;
 const windowHeight = Dimensions.get("screen").height;
-type Note = {
-  title: string;
-  desc: string;
 
-};
-interface NoteColors {
-  [index: number]: string;
-}
 const HomeScreen = ({ navigation }) => {
-
   const { userToken, signOut } = useAuth();
-  const [noteColors, setNoteColors] = useState<NoteColors>({});
+  const [noteColors, setNoteColors] = useState({});
   const isFocused = useIsFocused();
-  const [allnotes, setAll] = useState<Note[]>([]);
+  const [allnotes, setAll] = useState([]);
   const [allColors, setAllColors] = useState({});
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -40,9 +39,7 @@ const HomeScreen = ({ navigation }) => {
     getAllNotes();
   }, [isFocused]);
 
-
-
-  const getNoteColor = (index: number) => {
+  const getNoteColor = (index) => {
     if (noteColors[index]) {
       return noteColors[index];
     } else {
@@ -52,15 +49,13 @@ const HomeScreen = ({ navigation }) => {
     }
   };
 
-  const saveNote = async (newNote: Note) => {
-    let temp = allnotes.slice();
-    let tempColors: { [key: number]: string } = { ...allColors };
+  const saveNote = async (newNote) => {
+    const temp = [...allnotes];
+    const tempColors = { ...allColors };
 
     const noteIndex = temp.length;
-    const noteColor = tempColors[noteIndex];
-
     temp.push(newNote);
-    tempColors[noteIndex] = noteColor;
+    tempColors[noteIndex] = getNoteColor(noteIndex);
 
     await EncryptedStorage.setItem("notes", JSON.stringify({ data: temp }));
     await EncryptedStorage.setItem("noteColors", JSON.stringify(tempColors));
@@ -68,14 +63,14 @@ const HomeScreen = ({ navigation }) => {
     getAllNotes();
   };
 
-
-  const deleteNote = async (index: number) => {
-    let newColors = { ...noteColors };
-    let tempColors: { [key: number]: string } = { ...allColors };
+  const deleteNote = async (index) => {
+    const newColors = { ...noteColors };
+    const tempColors = { ...allColors };
 
     delete newColors[index];
     setNoteColors(newColors);
-    let temp = allnotes.slice();
+
+    const temp = [...allnotes];
     temp.splice(index, 1);
     delete tempColors[index];
 
@@ -85,7 +80,7 @@ const HomeScreen = ({ navigation }) => {
     getAllNotes();
   };
 
-  const navigateToEditScreen = (index: number) => {
+  const navigateToEditScreen = (index) => {
     const noteToEdit = allnotes[index];
     navigation.navigate("EditNotesScreen", {
       noteToEdit,
@@ -97,60 +92,54 @@ const HomeScreen = ({ navigation }) => {
 
   const getAllNotes = async () => {
     try {
-      let x = [];
+      let notes = [];
       const storedNotes = await EncryptedStorage.getItem("notes");
-  
+
       if (storedNotes) {
-        try {
-          const parsedNotes = JSON.parse(storedNotes);
-          if (parsedNotes && parsedNotes.data) {
-            x = parsedNotes.data;
-          }
-        } catch (error) {
-          console.error("Error parsing stored notes:", error);
+        const parsedNotes = JSON.parse(storedNotes);
+        if (parsedNotes && parsedNotes.data) {
+          notes = parsedNotes.data;
         }
       }
-  
-      setAll(x);
-  
+
+      setAll(notes);
+
       const storedColors = await EncryptedStorage.getItem("noteColors");
       let colors = {};
-  
+
       if (storedColors) {
-        try {
-          colors = JSON.parse(storedColors);
-        } catch (error) {
-          console.error("Error parsing note colors:", error);
-        }
+        colors = JSON.parse(storedColors);
       }
-  
+
       setAllColors(colors || {});
     } catch (error) {
       console.error("Error fetching notes or colors:", error);
     }
   };
-  
-
 
   const filteredNotes = allnotes.filter((item) =>
     item.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const renderItem = ({ item, index }: { item: Note; index: number }) => {
-    const noteColor = getNoteColor(index);
-
+  const renderItem = ({ item, index }) => {
     return (
-      <TouchableOpacity onPress={() => navigateToEditScreen(index)} style={{ alignItems: 'center' }}>
+      <TouchableOpacity
+        onPress={() => navigateToEditScreen(index)}
+        style={{ alignItems: "center" }}
+      >
         <View style={styles.notetab}>
           <View style={{ width: "80%", height: "100%" }}>
             <Text style={styles.title}>{item.title}</Text>
             <Text style={styles.desc}>{item.desc}</Text>
           </View>
           <TouchableOpacity
-            style={{ height: "100%", width: '15%', justifyContent: "center", }}
+            style={{ height: "100%", width: "15%", justifyContent: "center" }}
             onPress={() => deleteNote(index)}
           >
-            <Image style={styles.delete} source={require("../../Images/bin.png")} />
+            <Image
+              style={styles.delete}
+              source={require("../../Images/bin.png")}
+            />
           </TouchableOpacity>
         </View>
       </TouchableOpacity>
@@ -159,17 +148,15 @@ const HomeScreen = ({ navigation }) => {
 
   return (
     <View style={styles.background}>
-
       <View style={styles.searchtab}>
-
         <TextInput
           style={styles.input}
           placeholder="Search..."
+          placeholderTextColor="#579BB1"
           textAlign="center"
           value={searchQuery}
           onChangeText={(text) => setSearchQuery(text)}
         />
-
       </View>
       <View style={styles.noteback}>
         <FlatList
@@ -180,9 +167,11 @@ const HomeScreen = ({ navigation }) => {
       </View>
       <View>
         <BannerAd
-          unitId={Platform.OS === 'ios'
-            ? 'ca-app-pub-6119758783032593/4124837401'
-            : null}
+          unitId={
+            Platform.OS === "ios"
+              ? "ca-app-pub-6119758783032593/4124837401"
+              : "ca-app-pub-6119758783032593/4124837401"
+          }
           size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
           requestOptions={{ requestNonPersonalizedAdsOnly: true }}
         />
@@ -193,7 +182,7 @@ const HomeScreen = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   delete: {
-    position: 'absolute',
+    position: "absolute",
     width: 35,
     height: 35,
   },
@@ -207,52 +196,42 @@ const styles = StyleSheet.create({
     marginTop: 10,
     fontSize: 20,
   },
-  plusimg: {
-    width: 20,
-    height: 20,
-  },
-  searchimg: {
-    width: 20,
-    height: 20,
-    marginLeft: 30,
-  },
   input: {
     width: "100%",
-    height: "60%",
-    borderColor: "white",
-    borderWidth: 1.5,
+    height: "70%",
+    borderColor: "#579BB1",
+    borderWidth: 2.5,
     borderRadius: 20,
     color: "white",
   },
   searchtab: {
-    width: wp('100%'),
-    height: hp('10%'),
-    marginTop: hp('7%'),
+    width: wp("100%"),
+    height: hp("10%"),
+    marginTop: hp("7%"),
     flexDirection: "column",
     justifyContent: "space-between",
-    paddingHorizontal: wp('5%'), // Adjust the paddingHorizontal value as needed
+    paddingHorizontal: wp("5%"),
     alignItems: "center",
   },
   background: {
     flex: 1,
-    backgroundColor: "#99BC85",
+    backgroundColor: "#C4DFDF",
     flexDirection: "column",
     alignItems: "center",
   },
   notetab: {
     marginTop: 10,
     flexDirection: "row",
-    height: 100, // Set a fixed height for each note
+    height: 100,
     backgroundColor: "#E1F0DA",
     width: "100%",
-    paddingHorizontal: 10, // Add some padding for better separation
-    justifyContent: 'space-between', // Align items vertically
+    paddingHorizontal: 10,
+    justifyContent: "space-between",
   },
-
   noteback: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center'
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
 

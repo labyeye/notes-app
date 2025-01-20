@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Text, Pressable, Image, Dimensions, TextInput, FlatList, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Text, Pressable, Image, Dimensions, TextInput, FlatList, TouchableOpacity, Platform } from "react-native";
 import { useIsFocused } from "@react-navigation/native";
 import StatTodo from "../TodoStat";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -8,10 +8,10 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads';
 
 const TodoHome = ({ navigation }) => {
-  const [showDoneAnimation, setShowDoneAnimation] = React.useState(false);
+  const [showDoneAnimation, setShowDoneAnimation] = useState(false);
   const isFocused = useIsFocused();
   const [noteColors, setNoteColors] = useState({});
-  const [regularCheckboxCount, setRegularCheckboxCount] = useState<{ [key: string]: number }>({});
+  const [regularCheckboxCount, setRegularCheckboxCount] = useState({});
   const [alltodos, setAllTodos] = useState([]);
   const [checkedItems, setCheckedItems] = useState({});
   const [searchQuery, setSearchQuery] = useState("");
@@ -25,11 +25,6 @@ const TodoHome = ({ navigation }) => {
       AsyncStorage.setItem('checkbox', JSON.stringify(regularCheckboxCount));
     }
   }, [regularCheckboxCount]);
-
-  
-  
-
-
 
   const handledone = async (category, index) => {
     setShowDoneAnimation(true);
@@ -91,10 +86,6 @@ const TodoHome = ({ navigation }) => {
     }
   };
 
-
-
-
-
   useEffect(() => {
     if (isFocused) {
       getAllTodos();
@@ -123,7 +114,6 @@ const TodoHome = ({ navigation }) => {
       console.error("Error retrieving todos:", error);
     }
   };
-
 
   const renderItem = ({ item, index }) => {
     const isChecked = checkedItems[`${item.category}_${index}`] || false;
@@ -159,6 +149,7 @@ const TodoHome = ({ navigation }) => {
       </TouchableOpacity>
     );
   };
+  
   return (
     <View style={styles.background}>
       <View style={styles.searchtab}>
@@ -168,15 +159,17 @@ const TodoHome = ({ navigation }) => {
         <TextInput
           style={styles.input}
           placeholder="Search..."
+          placeholderTextColor="#579BB1"
           textAlign="center"
           value={searchQuery}
           onChangeText={(text) => handleSearch(text)}
         />
-
       </View>
+      
       <View style={{ width: "100%", flexDirection: 'row', alignItems: 'flex-start', marginLeft: 30, marginTop: 20 }}>
-        <Text style={{ color: 'white', fontSize: 20, marginBottom: 10 }}>Regular Todos</Text>
+        <Text style={{ color: '#579BB1', fontSize: 20, marginBottom: 10 }}>Regular Todos</Text>
       </View>
+      
       <View style={styles.noteback}>
         <FlatList
           data={filteredTodos.filter(todo => todo.category === "Regular")}
@@ -184,9 +177,11 @@ const TodoHome = ({ navigation }) => {
           keyExtractor={(item, index) => `Regular_${index}`}
         />
       </View>
+      
       <View style={{ width: "100%", flexDirection: 'row', alignItems: 'flex-start', marginLeft: 30, marginTop: 10 }}>
-        <Text style={{ color: 'white', fontSize: 20, marginBottom: 10 }}>Occasional Todos</Text>
+        <Text style={{ color: '#579BB1', fontSize: 20, marginBottom: 10 }}>Occasional Todos</Text>
       </View>
+      
       <View style={styles.noteback}>
         <FlatList
           data={filteredTodos.filter(todo => todo.category === "Occasional")}
@@ -194,15 +189,15 @@ const TodoHome = ({ navigation }) => {
           keyExtractor={(item, index) => `Occasional_${index}`}
         />
       </View>
+
       <View>
         <BannerAd
-          unitId={Platform.OS === 'ios'
-            ? 'ca-app-pub-6119758783032593/4124837401'
-            : null}
+          unitId={Platform.OS === 'ios' ? 'ca-app-pub-6119758783032593/4124837401' : null}
           size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
           requestOptions={{ requestNonPersonalizedAdsOnly: true }}
         />
       </View>
+
       <StatTodo regularCheckboxCount={regularCheckboxCount} navigation={navigation} />
     </View>
   );
@@ -212,7 +207,7 @@ const styles = StyleSheet.create({
   background: {
     height: "100%",
     width: "100%",
-    backgroundColor: '#99BC85',
+    backgroundColor: '#E3F4F4',
     flexDirection: 'column',
     alignItems: 'center',
   },
@@ -234,7 +229,6 @@ const styles = StyleSheet.create({
     height: "100%",
     marginLeft: 10,
     fontSize: 25,
-
   },
   desc: {
     marginLeft: 10,
@@ -249,12 +243,11 @@ const styles = StyleSheet.create({
   searchimg: {
     width: 20,
     height: 20,
-
   },
   input: {
     width: "85%",
     height: "60%",
-    borderColor: 'white',
+    borderColor: '#579BB1',
     borderWidth: 3,
     borderRadius: 20,
     marginLeft: 5,
@@ -266,7 +259,7 @@ const styles = StyleSheet.create({
     marginTop: hp('5%'),
     flexDirection: "row",
     justifyContent: "space-between",
-    paddingHorizontal: wp('5%'), // Adjust the paddingHorizontal value as needed
+    paddingHorizontal: wp('5%'),
     alignItems: "center",
   },
   checkbox: {

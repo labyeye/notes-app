@@ -24,7 +24,7 @@ const TabNavigator = () => (
   <Tab.Navigator
     activeColor="#4F6F52"
     inactiveColor="white"
-    barStyle={{ backgroundColor: "#BFD8AF" }}
+    barStyle={{ backgroundColor: "#D2E9E9" }}
     shifting={true}
   >
     <Tab.Screen
@@ -87,7 +87,6 @@ const App = () => {
   }, []);
 
   if (!initialRoute) {
-    // Optional splash screen or loading indicator
     return null;
   }
 

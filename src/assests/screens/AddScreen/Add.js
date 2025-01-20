@@ -24,21 +24,21 @@ const Add = ({ navigation }) => {
 const styles = StyleSheet.create({
     background: {
         flex: 1,
-        backgroundColor: "#99BC85",
+        backgroundColor: "#C4DFDF",
         flexDirection: "column",
         alignItems: "center",
         justifyContent: 'center',
         gap: 30
     },
     notetab: {
-        backgroundColor:'#D4E7C5',
+        backgroundColor:'#E3F4F4',
         width: "38%",
         borderRadius:100,
         height: "20%",
         justifyContent: 'center' 
     },
     todotab: {
-        backgroundColor:'#D4E7C5',
+        backgroundColor:'#E3F4F4',
         borderRadius:100,
         width: "38%",
         height: "20%",

@@ -1,12 +1,11 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { FlatList, Image, Pressable, StyleSheet, Text, View } from "react-native";
 import PieChart from "react-native-pie-chart";
-import EncryptedStorage from "react-native-encrypted-storage";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const StatTodo = ({ navigation, route }) => {
-  const [regularCheckboxCount, setRegularCheckboxCount] = useState<Record<string, number>>({});
-  const [series, setSeries] = useState<number[]>([]);
+  const [regularCheckboxCount, setRegularCheckboxCount] = useState({});
+  const [series, setSeries] = useState([]);
 
   const [alltodos, setAllTodos] = useState([]);
   const sliceColor = [
@@ -71,7 +70,7 @@ const StatTodo = ({ navigation, route }) => {
         </Pressable>
         </View>
         <View style={{width:"100%",marginLeft:70}}>
-        <Text style={{ color: 'white', fontSize: 20 ,alignSelf:'center'}}>Statistics Screen</Text>
+        <Text style={{ color: '#579BB1', fontSize: 20 ,alignSelf:'center'}}>Statistics Screen</Text>
       </View>
       </View>
       
@@ -79,7 +78,7 @@ const StatTodo = ({ navigation, route }) => {
         {series.length > 0 ? (
           <PieChart series={series} sliceColor={sliceColor.slice(0, series.length)} widthAndHeight={300} />
         ) : (
-          <Text style={{ color: 'white' }}>No data available for the pie chart</Text>
+          <Text style={{ color: '#579BB1' }}>No data available for the pie chart</Text>
         )}
       </View>
       <View style={styles.flatListContainer}>
@@ -92,12 +91,13 @@ const StatTodo = ({ navigation, route }) => {
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'column',
     width: "100%",
     height: "100%",
-    backgroundColor: '#99BC85',
+    backgroundColor: '#C4DFDF',
   },
   search: {
     width: "50%",
@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   listItem: {
-    backgroundColor: "#E1F0DA",
+    backgroundColor: "#579BB1",
     flexDirection: 'column',
     justifyContent: 'center',
     marginTop: 10,
@@ -133,7 +133,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginLeft: 10,
     fontFamily: 'Salina-Trial-Bold.ttf'
-
   },
 });
 

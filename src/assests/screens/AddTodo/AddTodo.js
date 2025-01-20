@@ -30,13 +30,9 @@ const AddTodo = ({ navigation }) => {
    useEffect(() => {
       const unsubscribeLoaded = interstitial.addAdEventListener(AdEventType.LOADED, () => {
           setLoaded(true);
-          setadLoaded(true); // Update adLoaded state
+          setadLoaded(true); 
       });
-  
-      // Start loading the interstitial straight away
-      interstitial.load();
-  
-      // Unsubscribe from events on unmount
+      interstitial.load();  
       return () => {
           unsubscribeLoaded();
       };
@@ -55,9 +51,6 @@ const AddTodo = ({ navigation }) => {
       try {
         let existingTodo = await AsyncStorage.getItem('todo');
         existingTodo = existingTodo ? JSON.parse(existingTodo).data : [];
-      //   await AsyncStorage.setItem('chec', JSON.stringify({
-      //    '0' : 3 
-      //   }))
         let response = await AsyncStorage.getItem('chec');
         console.log("Resp:",[response]);
         const newTodo = { title, desc, category: selectedCategory };
@@ -119,7 +112,7 @@ const styles = StyleSheet.create({
    container: {
       height: windowHeight,
       width: windowWidth,
-      backgroundColor: "#99BC85",      
+      backgroundColor: "#E3F4F4",      
       flexDirection: "column",
       alignItems: "center",
    },
