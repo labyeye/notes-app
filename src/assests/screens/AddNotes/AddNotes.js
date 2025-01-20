@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
         padding: 10,
         height: "10%",
         color: 'white',
-        backgroundColor: '#99BC85',
+        backgroundColor: '#C4DFDF',
     },
     adddesc: {
         width: windowWidth,
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
         padding: 10,
         color: 'white',
         height: windowHeight,
-        backgroundColor: '#99BC85',
+        backgroundColor: '#C4DFDF',
     },
     searchimg: {
         width: 30,
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
     },
     background: {
         height: windowHeight,
-        backgroundColor: '#99BC85',
+        backgroundColor: '#C4DFDF',
         flexDirection: 'column',
         alignItems: 'center',
     },

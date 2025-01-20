@@ -107,12 +107,12 @@ const styles = StyleSheet.create({
       padding:10,
       height: "30%",
       color:'white',
-      backgroundColor: "#99BC85",  },
+      backgroundColor: "#C4DFDF",  },
   
    container: {
       height: windowHeight,
       width: windowWidth,
-      backgroundColor: "#E3F4F4",      
+      backgroundColor: "#C4DFDF",      
       flexDirection: "column",
       alignItems: "center",
    },
