@@ -8,6 +8,7 @@ import {
   Dimensions,
   TextInput,
   FlatList,
+  ScrollView,
   TouchableOpacity,
   Platform,
 } from "react-native";
@@ -34,10 +35,13 @@ const HomeScreen = ({ navigation }) => {
   const [allnotes, setAll] = useState([]);
   const [allColors, setAllColors] = useState({});
   const [searchQuery, setSearchQuery] = useState("");
+  const [category, setCategory] = useState('All');
+
+  const categories = ['All', 'Work', 'Personal', 'Shopping', 'Fitness', 'Hobbies'];
 
   useEffect(() => {
     getAllNotes();
-  }, [isFocused]);
+  }, [isFocused, category]);
 
   const getNoteColor = (index) => {
     if (noteColors[index]) {
@@ -102,7 +106,9 @@ const HomeScreen = ({ navigation }) => {
         }
       }
 
-      setAll(notes);
+      const filteredNotes = category === 'All' ? notes : notes.filter(note => note.category === category);
+
+      setAll(filteredNotes);
 
       const storedColors = await EncryptedStorage.getItem("noteColors");
       let colors = {};
@@ -158,6 +164,29 @@ const HomeScreen = ({ navigation }) => {
           onChangeText={(text) => setSearchQuery(text)}
         />
       </View>
+
+      <View style={styles.categoryButtons}>
+  <ScrollView
+    horizontal
+    showsHorizontalScrollIndicator={false}
+    contentContainerStyle={styles.scrollContent}
+  >
+    {categories.map((categoryOption) => (
+      <Pressable
+        key={categoryOption}
+        style={[
+          styles.categoryButton,
+          category === categoryOption && styles.selectedCategory,
+        ]}
+        onPress={() => setCategory(categoryOption)}
+      >
+        <Text style={styles.categoryButtonText}>{categoryOption}</Text>
+      </Pressable>
+    ))}
+  </ScrollView>
+</View>
+
+
       <View style={styles.noteback}>
         <FlatList
           data={filteredNotes}
@@ -165,6 +194,7 @@ const HomeScreen = ({ navigation }) => {
           keyExtractor={(item, index) => index.toString()}
         />
       </View>
+
       <View>
         <BannerAd
           unitId={
@@ -233,6 +263,30 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  categoryButtons: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginTop: 10,
+    marginBottom: 20,
+    width: "100%",
+    paddingHorizontal: 10, 
+  },
+  categoryButton: {
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    borderRadius: 30,
+    borderColor:"#D2E9E9",
+    borderWidth:2,
+    marginHorizontal: 5, 
+  },
+  selectedCategory: {
+    backgroundColor: "#D2E9E9",
+  },
+  categoryButtonText: {
+    color: "black",
+    fontSize: 16,
+  },
+  
 });
 
 export default HomeScreen;
