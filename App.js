@@ -5,7 +5,7 @@ import { createMaterialBottomTabNavigator } from "@react-navigation/material-bot
 import HomeScreen from "./src/assests/screens/Home/HomeScreen";
 import Start from "./src/assests/screens/Start";
 import TodoHome from "./src/assests/screens/TodoHome";
-import { Image, StyleSheet } from "react-native";
+import { Image, StyleSheet, View, Platform, Dimensions } from "react-native";
 import StatTodo from "./src/assests/screens/TodoStat/StatTodo";
 import DoneTodo from "./src/assests/screens/DoneTodo/DoneTodo";
 import AddNotes from "./src/assests/screens/AddNotes/AddNotes";
@@ -20,23 +20,35 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 const Stack = createNativeStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
 
+const { width } = Dimensions.get('window');
+
 const TabNavigator = () => (
   <Tab.Navigator
-    activeColor="#4F6F52"
-    inactiveColor="white"
-    barStyle={{ backgroundColor: "#D2E9E9" }}
+    initialRouteName="Home"
+    activeColor="#D2E9E9"
+    inactiveColor="#FFFFFF"
+    labeled={true}
     shifting={true}
+    barStyle={styles.tabBar}
+    sceneAnimationEnabled={true}
   >
     <Tab.Screen
       name="Home"
       component={HomeScreen}
       options={{
         tabBarIcon: ({ focused }) => (
-          <Image
-            source={require("./src/assests/Images/noty.png")}
-            style={{ tintColor: focused ? "black" : "white" }}
-          />
+          <View style={[styles.iconContainer, focused && styles.activeIconContainer]}>
+            <Image
+              source={require("./src/assests/Images/noty.png")}
+              style={[
+                styles.tabIcon,
+                { tintColor: focused ? "#4F6F52" : "white" }
+              ]}
+              resizeMode="contain"
+            />
+          </View>
         ),
+        tabBarColor: "#D2E9E9"
       }}
     />
     <Tab.Screen
@@ -44,15 +56,18 @@ const TabNavigator = () => (
       component={Add}
       options={{
         tabBarIcon: ({ focused }) => (
-          <Image
-            source={require("./src/assests/Images/plus.png")}
-            style={{
-              tintColor: focused ? "black" : "white",
-              width: "50%",
-              justifyContent: "center",
-            }}
-          />
+          <View style={styles.addIconContainer}>
+            <Image
+              source={require("./src/assests/Images/plus.png")}
+              style={[
+                styles.addIcon,
+                { tintColor: "white" }
+              ]}
+              resizeMode="contain"
+            />
+          </View>
         ),
+        tabBarColor: "#D2E9E9"
       }}
     />
     <Tab.Screen
@@ -60,18 +75,26 @@ const TabNavigator = () => (
       component={TodoHome}
       options={{
         tabBarIcon: ({ focused }) => (
-          <Image
-            source={require("./src/assests/Images/done.png")}
-            style={{ tintColor: focused ? "black" : "white" }}
-          />
+          <View style={[styles.iconContainer, focused && styles.activeIconContainer]}>
+            <Image
+              source={require("./src/assests/Images/done.png")}
+              style={[
+                styles.tabIcon,
+                { tintColor: focused ? "#4F6F52" : "white" }
+              ]}
+              resizeMode="contain"
+            />
+          </View>
         ),
+        tabBarColor: "#D2E9E9"
       }}
     />
   </Tab.Navigator>
 );
 
 const App = () => {
-  const [initialRoute, setInitialRoute] = React.useState("Start");
+  const [initialRoute, setInitialRoute] = React.useState(null);
+  const [isLoading, setIsLoading] = React.useState(true);
 
   React.useEffect(() => {
     const checkStartScreenSeen = async () => {
@@ -80,13 +103,16 @@ const App = () => {
         setInitialRoute(startScreenSeen === "true" ? "Main" : "Start");
       } catch (error) {
         console.error("Error checking start screen status:", error);
+        setInitialRoute("Start"); // Default to Start screen on error
+      } finally {
+        setIsLoading(false);
       }
     };
 
     checkStartScreenSeen();
   }, []);
 
-  if (!initialRoute) {
+  if (isLoading || !initialRoute) {
     return null;
   }
 
@@ -95,13 +121,12 @@ const App = () => {
       <AuthProvider>
         <Stack.Navigator
           initialRouteName={initialRoute}
-          screenOptions={{ headerShown: false }}
+          screenOptions={{ 
+            headerShown: false,
+            contentStyle: { backgroundColor: '#EFF6FF' }
+          }}
         >
-          <Stack.Screen
-            name="Start"
-            component={Start}
-            options={{ headerShown: false }}
-          />
+          <Stack.Screen name="Start" component={Start} />
           <Stack.Screen
             name="Main"
             component={TabNavigator}
@@ -120,7 +145,50 @@ const App = () => {
 };
 
 const styles = StyleSheet.create({
-  shadow: {},
+  tabBar: {
+    backgroundColor: "#D2E9E9",
+    height: 55,
+    borderTopWidth: 0,
+    elevation: 0,
+    borderTopColor: "transparent",
+    justifyContent: "center",
+    paddingBottom: 5,
+  },
+  iconContainer: {
+    width: 60,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 20,
+  },
+  activeIconContainer: {
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+  },
+  tabIcon: {
+    width: 24,
+    height: 24,
+  },
+  addIconContainer: {
+    width: 50,
+    height: 50,
+    backgroundColor: '#579BB1',
+    borderRadius: 25,
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+    bottom: 0,
+    borderWidth: 3,
+    borderColor: 'white',
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+  },
+  addIcon: {
+    width: 32,
+    height: 32,
+  }
 });
 
 export default App;
