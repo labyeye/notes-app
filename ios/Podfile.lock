@@ -554,6 +554,9 @@ PODS:
     - GoogleUserMessagingPlatform (= 2.1.0)
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
+  - RNReactNativeHapticFeedback (2.3.3):
+    - RCT-Folly (= 2021.07.22.00)
+    - React-Core
   - RNReanimated (3.6.1):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
@@ -643,6 +646,7 @@ DEPENDENCIES:
   - "RNCPicker (from `../node_modules/@react-native-picker/picker`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNGoogleMobileAds (from `../node_modules/react-native-google-mobile-ads`)
+  - RNReactNativeHapticFeedback (from `../node_modules/react-native-haptic-feedback`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
@@ -766,6 +770,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-gesture-handler"
   RNGoogleMobileAds:
     :path: "../node_modules/react-native-google-mobile-ads"
+  RNReactNativeHapticFeedback:
+    :path: "../node_modules/react-native-haptic-feedback"
   RNReanimated:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
@@ -843,6 +849,7 @@ SPEC CHECKSUMS:
   RNCPicker: 7ea4c112b43a2033ddb1e5e2ecb2e826f222b897
   RNGestureHandler: 7790dd2568748c4aa163083e443416b5ba5b3291
   RNGoogleMobileAds: 8c51a79ad512c27318b238fcf76a4644575d05d5
+  RNReactNativeHapticFeedback: 4a15f166bef6bc51da0f211ef286d0ad60a6b0aa
   RNReanimated: d68055f7ed28ff7e13c9ddd942a9a92583bde703
   RNScreens: 62105361665a78db040bc4563f8cc755cb49c46e
   RNSVG: 6d5ed33b6635ed6d6ecb50744dcf127580c39ed5

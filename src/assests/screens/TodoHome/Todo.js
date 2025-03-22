@@ -183,6 +183,14 @@ const TodoHome = ({ navigation }) => {
     }
   };
 
+  const handleEditTodo = (item, index) => {
+    // Navigate to EditTodo screen with the todo item data
+    navigation.navigate("EditTodo", { 
+      todoItem: item,
+      todoIndex: index 
+    });
+  };
+
   const renderItem = ({ item, index }) => {
     if (!item) return null;
     
@@ -210,7 +218,8 @@ const TodoHome = ({ navigation }) => {
       <TouchableOpacity
         onPressIn={onPressIn}
         onPressOut={onPressOut}
-        activeOpacity={0.8}>
+        activeOpacity={0.8}
+        onPress={() => handleEditTodo(item, index)}>
         <Animated.View 
           style={[
             styles.todoItem, 
@@ -227,7 +236,8 @@ const TodoHome = ({ navigation }) => {
               unfillColor="#FFFFFF"
               iconStyle={{ borderColor: "#0077B6" }}
               innerIconStyle={{ borderWidth: 2 }}
-              onPress={() => {
+              onPress={(isChecked) => {
+                // Prevent triggering edit when checkbox is pressed
                 handleCheckboxPress(index, item.category);
                 handledone(item.category, index);
               }}
@@ -248,7 +258,11 @@ const TodoHome = ({ navigation }) => {
           </View>
           <TouchableOpacity
             style={styles.deleteButton}
-            onPress={() => handleDelete(index, item.category)}>
+            onPress={(e) => {
+              // Stop event propagation to prevent triggering edit
+              e.stopPropagation();
+              handleDelete(index, item.category);
+            }}>
             <Image style={styles.deleteIcon} source={require('../../Images/bin.png')} />
           </TouchableOpacity>
         </Animated.View>
